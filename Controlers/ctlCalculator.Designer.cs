@@ -319,6 +319,7 @@
             this.btnSqrt.TabIndex = 39;
             this.btnSqrt.Text = "Sqrt";
             this.btnSqrt.UseVisualStyleBackColor = true;
+            this.btnSqrt.Click += new System.EventHandler(this.btnSqrt_Click);
             // 
             // btnLn
             // 
@@ -390,6 +391,7 @@
             this.primTextBox.Name = "primTextBox";
             this.primTextBox.Size = new System.Drawing.Size(468, 20);
             this.primTextBox.TabIndex = 31;
+            this.primTextBox.Enter += new System.EventHandler(this.primTextBox_Enter);
             this.primTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.primTextBox_KeyDown);
             // 
             // ctlCalculator

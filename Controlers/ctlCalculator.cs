@@ -69,35 +69,66 @@ namespace Scientific_Calculator.Controlers
         private void btnCancel_Click(object sender, EventArgs e) {
             string str = primTextBox.Text;
             int len = str.Length;
-            primTextBox.Text = (str.Substring(0, len - 1));
+            if (len > 0)
+                primTextBox.Text = (str.Substring(0, len - 1));
         }
         #endregion
         private void Result() {
             primTextBox.Text = Regex.Replace(primTextBox.Text, @"\s", "");
             if (validateExpression()) {
                 string exp = primTextBox.Text;
-                var result = new DataTable().Compute(exp, null);
-                memTextBox.Text = primTextBox.Text;
-                primTextBox.Text = result.ToString();
+                try {
+                    var result = new DataTable().Compute(exp, null);
+                    memTextBox.Text = primTextBox.Text;
+                    primTextBox.Text = result.ToString();
+                }
+                catch (DivideByZeroException) {
+                    memTextBox.Text = "Infinity/NaN";
+                }    
             } else {
-                memTextBox.Text = "Please Enter A Valid Expression";
+                    memTextBox.Text = "Please Enter A Valid Expression";
             }
         }
         private bool validateExpression() {
-            Regex regex = new Regex(@"^[-+]?[0-9]+([-+*/]+[-+]?[0-9]+)*$");
+             Regex regex = new Regex(@"^[-+]?([0-9]|\-?\d+\.\d)+([-+*/]+[-+]?([0-9]|\-?\d+\.\d)+)*$");
+            //Regex regex = new Regex(@"^[-+]?[0-9]+([-+*/]+[-+]?[0-9]+)*$");
             return regex.IsMatch(primTextBox.Text) ? true : false;
+        }
+        private void shiftCursor() {
+            primTextBox.SelectionStart = primTextBox.Text.Length + 1;
+            primTextBox.SelectionLength = 0;
         }
         #region event listeners
         private void btnEquals_Click(object sender, EventArgs e) {
             Result();
+            primTextBox.SelectionStart = primTextBox.Text.Length + 1;
+            primTextBox.SelectionLength = 0;
         }
         private void primTextBox_KeyDown(object sender, KeyEventArgs e) {
             switch (e.KeyCode) {
                 case Keys.Enter:
                     Result();
+                    shiftCursor();
                     break;
             }
         }
+        private void primTextBox_Enter(object sender, EventArgs e) {
+            shiftCursor();
+        }
         #endregion event listeners
+        #region button functionality
+        private void btnSqrt_Click(object sender, EventArgs e) {
+            if (validateExpression()) {
+                Result();
+                double num = Convert.ToDouble(primTextBox.Text);
+                if (num < 0) {
+                    memTextBox.Text = "Error: Negative Sqrt";
+                } else {
+                    primTextBox.Text = Math.Sqrt(num).ToString();
+                    memTextBox.Text = "Sqrt(" + num + ")";
+                }
+            }
+        }
+        #endregion button functionality
     }
 }
