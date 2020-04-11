@@ -14,6 +14,8 @@ namespace Scientific_Calculator.Controlers
     public partial class ctlCalculator : UserControl
     {
         bool bSimpleExpression = false;
+        string Pow2Input;
+        bool bPower2Set = true;
         public ctlCalculator() {
             InitializeComponent();
         }
@@ -63,6 +65,7 @@ namespace Scientific_Calculator.Controlers
 
         #region topthree
         private void btnClear_Click(object sender, EventArgs e) {
+            memTextBox.Text = string.Empty;
             primTextBox.Text = string.Empty;
         }
 
@@ -74,41 +77,95 @@ namespace Scientific_Calculator.Controlers
         }
         #endregion
         private void Result() {
-            primTextBox.Text = Regex.Replace(primTextBox.Text, @"\s", "");
+            memTextBox.Text += primTextBox.Text;
+            memTextBox.Text = Regex.Replace(memTextBox.Text, @"\s", "");
+            if (!string.IsNullOrEmpty(Pow2Input))
+                memTextBox.Text = Regex.Replace(memTextBox.Text, @"(\w*[0-9]\^2)", Pow2Input + "*" + Pow2Input);
             if (validateExpression()) {
-                string exp = primTextBox.Text;
+                string exp = memTextBox.Text;
                 try {
                     var result = new DataTable().Compute(exp, null);
-                    memTextBox.Text = primTextBox.Text;
-                    primTextBox.Text = result.ToString();
+                    labelInfo.Text = "Expression: " + memTextBox.Text;
+                    memTextBox.Text = result.ToString();
+                    primTextBox.Text = string.Empty;
                 }
-                catch (DivideByZeroException) {
-                    memTextBox.Text = "Infinity/NaN";
+                catch (Exception ex) {
+                    if ( ex is DivideByZeroException || ex is OverflowException) {
+                        labelInfo.Text = "Infinity/NaN";
+                    }
                 }    
             } else {
-                    memTextBox.Text = "Please Enter A Valid Expression";
+                    labelInfo.Text = "Please Enter A Valid Expression";
             }
         }
         private bool validateExpression() {
-             Regex regex = new Regex(@"^[-+]?([0-9]|\-?\d+\.\d)+([-+*/]+[-+]?([0-9]|\-?\d+\.\d)+)*$");
+            string NoParenth = memTextBox.Text.Replace("(", "").Replace(")", "");
+            Regex regex = new Regex(@"^[-+]?([0-9]|\-?\d+\.\d)+([-+*/]+[-+]?([0-9]|\-?\d+\.\d)+)*$");
             //Regex regex = new Regex(@"^[-+]?[0-9]+([-+*/]+[-+]?[0-9]+)*$");
-            return regex.IsMatch(primTextBox.Text) ? true : false;
+            return regex.IsMatch(NoParenth) ? true : false;
         }
         private void shiftCursor() {
             primTextBox.SelectionStart = primTextBox.Text.Length + 1;
             primTextBox.SelectionLength = 0;
         }
+        // Note: Repeat Operator Example: 0+0 or 1*1 or 1/1, etc
+        private void AppendToMemBox(string op, bool flip) {
+            int len = 0;
+            char prevOp = ' ';
+            // If memBox not empty, create Previous Operator 
+            if (TextNotEmpty(memTextBox.Text)) {
+                len = memTextBox.Text.Length;
+                prevOp = (char)memTextBox.Text[len-1];
+            }
+            // If MemBox and PrimaryBox are Empty Append a 0 + 
+            if (!TextNotEmpty(memTextBox.Text) && !TextNotEmpty(primTextBox.Text)) {
+                memTextBox.Text += 0;
+                memTextBox.Text += op;
+            } 
+            // If Repeat Operator and user input, append operator
+            else if (prevOp.Equals(op[0]) && TextNotEmpty(primTextBox.Text)) { 
+                InsertMemBox(!flip, op);
+            } 
+            // If Not a Repeat Operator, Add New Operator and append number
+            else if (!prevOp.Equals(op[0]) && !Char.IsNumber(prevOp) && TextNotEmpty(primTextBox.Text)) {
+                InsertMemBox(!flip, op);
+            } 
+            // If Not a Repeat and Mem Box has a number with no Operator, append operator in correct position
+            else if (!prevOp.Equals(op[0]) && Char.IsNumber(prevOp)) {
+                if (TextNotEmpty(primTextBox.Text)) {
+                    flip = false;
+                } else if (!TextNotEmpty(primTextBox.Text)) {
+                    flip = true;
+                }
+                InsertMemBox(flip, op);
+            }
+            // Reset
+            primTextBox.Text = string.Empty;
+            primTextBox.SelectionStart = primTextBox.Text.Length + 1;
+            primTextBox.SelectionLength = 0;
+            primTextBox.Focus();
+        }
+        private void InsertMemBox(bool flip, string op) {
+            if (flip) {
+                memTextBox.Text += primTextBox.Text;
+                memTextBox.Text += op;
+            }
+            else {
+                memTextBox.Text += op;
+                memTextBox.Text += primTextBox.Text;
+            }
+        }
         #region event listeners
         private void btnEquals_Click(object sender, EventArgs e) {
             Result();
-            primTextBox.SelectionStart = primTextBox.Text.Length + 1;
-            primTextBox.SelectionLength = 0;
         }
         private void primTextBox_KeyDown(object sender, KeyEventArgs e) {
             switch (e.KeyCode) {
                 case Keys.Enter:
                     Result();
                     shiftCursor();
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
                     break;
             }
         }
@@ -128,7 +185,31 @@ namespace Scientific_Calculator.Controlers
                     memTextBox.Text = "Sqrt(" + num + ")";
                 }
             }
+            primTextBox.Focus();
         }
         #endregion button functionality
+
+        private void btnAdd_Click(object sender, EventArgs e) {
+            AppendToMemBox("+", false);    
+        }
+
+        private void btnPow2_Click(object sender, EventArgs e) {
+            if (TextNotEmpty(primTextBox.Text)) {
+                Pow2Input = primTextBox.Text;
+            } else {
+                Pow2Input = memTextBox.Text;
+            }
+            bPower2Set = true;
+            AppendToMemBox("^2", false);
+            Result();
+            bPower2Set = false;
+        }
+        private bool TextNotEmpty(string str) {
+            if (!string.IsNullOrEmpty(str) || !string.IsNullOrWhiteSpace(str)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }

@@ -60,12 +60,16 @@
             this.label1 = new System.Windows.Forms.Label();
             this.memTextBox = new System.Windows.Forms.TextBox();
             this.primTextBox = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.labelInfo = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.panel1.Controls.Add(this.labelInfo);
+            this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.btnTan);
             this.panel1.Controls.Add(this.btnSub);
             this.panel1.Controls.Add(this.btnAdd);
@@ -129,6 +133,7 @@
             this.btnAdd.TabIndex = 60;
             this.btnAdd.Text = "+";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnMult
             // 
@@ -310,6 +315,7 @@
             this.btnPow2.TabIndex = 40;
             this.btnPow2.Text = "Pow 2";
             this.btnPow2.UseVisualStyleBackColor = true;
+            this.btnPow2.Click += new System.EventHandler(this.btnPow2_Click);
             // 
             // btnSqrt
             // 
@@ -372,7 +378,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 16);
+            this.label1.Location = new System.Drawing.Point(17, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(30, 13);
             this.label1.TabIndex = 33;
@@ -393,6 +399,24 @@
             this.primTextBox.TabIndex = 31;
             this.primTextBox.Enter += new System.EventHandler(this.primTextBox_Enter);
             this.primTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.primTextBox_KeyDown);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(17, 40);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(31, 13);
+            this.label2.TabIndex = 63;
+            this.label2.Text = "Input";
+            // 
+            // labelInfo
+            // 
+            this.labelInfo.AutoSize = true;
+            this.labelInfo.Location = new System.Drawing.Point(20, 71);
+            this.labelInfo.Name = "labelInfo";
+            this.labelInfo.Size = new System.Drawing.Size(25, 13);
+            this.labelInfo.TabIndex = 64;
+            this.labelInfo.Text = "Info";
             // 
             // ctlCalculator
             // 
@@ -441,5 +465,7 @@
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnMult;
         private System.Windows.Forms.Button btnDiv;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelInfo;
     }
 }
