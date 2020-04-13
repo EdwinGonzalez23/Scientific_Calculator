@@ -142,6 +142,7 @@
             this.btnSub.TabIndex = 61;
             this.btnSub.Text = "-";
             this.btnSub.UseVisualStyleBackColor = true;
+            this.btnSub.Click += new System.EventHandler(this.btnSub_Click);
             // 
             // btnAdd
             // 
@@ -161,6 +162,7 @@
             this.btnMult.TabIndex = 59;
             this.btnMult.Text = "*";
             this.btnMult.UseVisualStyleBackColor = true;
+            this.btnMult.Click += new System.EventHandler(this.btnMult_Click);
             // 
             // btnDiv
             // 
@@ -170,6 +172,7 @@
             this.btnDiv.TabIndex = 58;
             this.btnDiv.Text = "/";
             this.btnDiv.UseVisualStyleBackColor = true;
+            this.btnDiv.Click += new System.EventHandler(this.btnDiv_Click);
             // 
             // btnSin
             // 
@@ -216,6 +219,7 @@
             this.btnDot.TabIndex = 53;
             this.btnDot.Text = ".";
             this.btnDot.UseVisualStyleBackColor = true;
+            this.btnDot.Click += new System.EventHandler(this.btnDot_Click);
             // 
             // btn0
             // 
@@ -355,6 +359,7 @@
             this.btnLn.TabIndex = 38;
             this.btnLn.Text = "ln";
             this.btnLn.UseVisualStyleBackColor = true;
+            this.btnLn.Click += new System.EventHandler(this.btnLn_Click);
             // 
             // btnExp
             // 
@@ -364,6 +369,7 @@
             this.btnExp.TabIndex = 37;
             this.btnExp.Text = "Exp";
             this.btnExp.UseVisualStyleBackColor = true;
+            this.btnExp.Click += new System.EventHandler(this.btnExp_Click);
             // 
             // btnEquals
             // 

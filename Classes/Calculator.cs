@@ -22,6 +22,44 @@ namespace Scientific_Calculator.Classes
             MemText += (PrimText + "+");
             PrimText = string.Empty;
         }
+        public void MultPressed() {
+            MemText += (PrimText + "*");
+            PrimText = string.Empty;
+        }
+        public void DividePressed() {
+            MemText += (PrimText + "/");
+            PrimText = string.Empty;
+        }
+        public void SubPressed() {
+            MemText += (PrimText + "-");
+            PrimText = string.Empty;
+        }
+        public void DotPressed() {
+            PrimText += ".";
+            //PrimText = string.Empty;
+        }
+        // ln(x) = 1 / log
+        public void lnPressed() {
+            double num = 0;
+            switch (State()) {
+                case "OverridePrim":
+                    num = Convert.ToDouble(PrimText);
+                    break;
+                case "OverrideMem":
+                    num = Convert.ToDouble(MemText);
+                    break;
+                case "Append":
+                    Result();
+                    num = Convert.ToDouble(MemText);
+                    break;
+                default:
+                    break;
+            }
+            double result = Math.Log10(num) / 0.4342944819;
+            LabelText = "ln(" + num + ")";
+            MemText = result.ToString();
+            PrimText = string.Empty;
+        }
         public void PowPressed(int pow) {
             double num = 0;
             switch (State()) {
@@ -66,8 +104,7 @@ namespace Scientific_Calculator.Classes
             MemText = result.ToString();
             PrimText = string.Empty;
         }
-
-        public void Pow3Pressed(double num1, double num2) {
+        public void ExpPressed(int exp) {
 
         }
         private void AppendToMemBox() {

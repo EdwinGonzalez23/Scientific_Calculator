@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Scientific_Calculator.Classes;
+using Scientific_Calculator.Popups;
 
 namespace Scientific_Calculator.Controlers
 {
@@ -131,18 +132,46 @@ namespace Scientific_Calculator.Controlers
         }
         #endregion event listeners
 
-        #region button functionality
+        #region +*/- buttons
+        private void btnAdd_Click(object sender, EventArgs e) {
+            calculator.AddPressed();
+            primTextBox.Text = calculator.getPrim();
+            memTextBox.Text = calculator.getMem();
+            primTextBox.Focus();
+        }
+        private void btnDiv_Click(object sender, EventArgs e) {
+            calculator.DividePressed();
+            primTextBox.Text = calculator.getPrim();
+            memTextBox.Text = calculator.getMem();
+            primTextBox.Focus();
+        }
+
+        private void btnMult_Click(object sender, EventArgs e) {
+            calculator.MultPressed();
+            primTextBox.Text = calculator.getPrim();
+            memTextBox.Text = calculator.getMem();
+            primTextBox.Focus();
+        }
+
+        private void btnSub_Click(object sender, EventArgs e) {
+            calculator.SubPressed();
+            primTextBox.Text = calculator.getPrim();
+            memTextBox.Text = calculator.getMem();
+            primTextBox.Focus();
+        }
+        #endregion +*/- buttons
+
+        #region Non +*/- buttons
         private void btnEquals_Click(object sender, EventArgs e) {
             // Result();
             calculator.CalculateResult();
             primTextBox.Text = calculator.getPrim();
             memTextBox.Text = calculator.getMem();
         }
-        private void btnAdd_Click(object sender, EventArgs e) {
-            calculator.AddPressed();
+        private void btnDot_Click(object sender, EventArgs e) {
+            calculator.DotPressed();
             primTextBox.Text = calculator.getPrim();
             memTextBox.Text = calculator.getMem();
-            primTextBox.Focus();
         }
         private void btnSqrt_Click(object sender, EventArgs e) {
             calculator.SqrtPressed(2);
@@ -164,7 +193,12 @@ namespace Scientific_Calculator.Controlers
             FillCalcInfo();
             primTextBox.Focus();
         }
-        #endregion button functionality
+        private void btnLn_Click(object sender, EventArgs e) {
+            calculator.lnPressed();
+            FillCalcInfo();
+            primTextBox.Focus();
+        }
+        #endregion Non +*/- buttons
         private bool TextNotEmpty(string str) {
             if (!string.IsNullOrEmpty(str) || !string.IsNullOrWhiteSpace(str)) {
                 return true;
@@ -237,5 +271,10 @@ namespace Scientific_Calculator.Controlers
         private void memTextBox_TextChanged(object sender, EventArgs e) {
             calculator.setMem(memTextBox.Text);
         }
+
+        private void btnExp_Click(object sender, EventArgs e) {
+        }
+
+        
     }
 }
