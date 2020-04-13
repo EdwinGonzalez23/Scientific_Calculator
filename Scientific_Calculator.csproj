@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Calculator.cs" />
+    <Compile Include="Classes\CalculatorHelper.cs" />
     <Compile Include="Controlers\ctlCalculator.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -95,7 +97,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Classes\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

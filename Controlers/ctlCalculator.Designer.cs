@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.labelInfo = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.btnTan = new System.Windows.Forms.Button();
             this.btnSub = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
@@ -60,8 +62,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.memTextBox = new System.Windows.Forms.TextBox();
             this.primTextBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.labelInfo = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -106,6 +106,24 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(549, 350);
             this.panel1.TabIndex = 0;
+            // 
+            // labelInfo
+            // 
+            this.labelInfo.AutoSize = true;
+            this.labelInfo.Location = new System.Drawing.Point(20, 71);
+            this.labelInfo.Name = "labelInfo";
+            this.labelInfo.Size = new System.Drawing.Size(25, 13);
+            this.labelInfo.TabIndex = 64;
+            this.labelInfo.Text = "Info";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(17, 40);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(31, 13);
+            this.label2.TabIndex = 63;
+            this.label2.Text = "Input";
             // 
             // btnTan
             // 
@@ -179,6 +197,7 @@
             this.btnSqrt3.TabIndex = 55;
             this.btnSqrt3.Text = "Sqrt 3";
             this.btnSqrt3.UseVisualStyleBackColor = true;
+            this.btnSqrt3.Click += new System.EventHandler(this.btnSqrt3_Click);
             // 
             // btnSign
             // 
@@ -306,6 +325,7 @@
             this.btnPow3.TabIndex = 41;
             this.btnPow3.Text = "Pow 3";
             this.btnPow3.UseVisualStyleBackColor = true;
+            this.btnPow3.Click += new System.EventHandler(this.btnPow3_Click);
             // 
             // btnPow2
             // 
@@ -390,6 +410,7 @@
             this.memTextBox.Name = "memTextBox";
             this.memTextBox.Size = new System.Drawing.Size(467, 20);
             this.memTextBox.TabIndex = 32;
+            this.memTextBox.TextChanged += new System.EventHandler(this.memTextBox_TextChanged);
             // 
             // primTextBox
             // 
@@ -397,26 +418,9 @@
             this.primTextBox.Name = "primTextBox";
             this.primTextBox.Size = new System.Drawing.Size(468, 20);
             this.primTextBox.TabIndex = 31;
+            this.primTextBox.TextChanged += new System.EventHandler(this.primTextBox_TextChanged);
             this.primTextBox.Enter += new System.EventHandler(this.primTextBox_Enter);
             this.primTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.primTextBox_KeyDown);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(17, 40);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(31, 13);
-            this.label2.TabIndex = 63;
-            this.label2.Text = "Input";
-            // 
-            // labelInfo
-            // 
-            this.labelInfo.AutoSize = true;
-            this.labelInfo.Location = new System.Drawing.Point(20, 71);
-            this.labelInfo.Name = "labelInfo";
-            this.labelInfo.Size = new System.Drawing.Size(25, 13);
-            this.labelInfo.TabIndex = 64;
-            this.labelInfo.Text = "Info";
             // 
             // ctlCalculator
             // 
