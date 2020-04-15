@@ -31,51 +31,61 @@ namespace Scientific_Calculator.Controlers
         {
             primTextBox.Text += "0";
             primTextBox.Focus();
+            calculator.PemdasOperatorActivated = false;
         }
         private void btn1_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "1";
             primTextBox.Focus();
+            calculator.PemdasOperatorActivated = false;
         }
         private void btn2_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "2";
             primTextBox.Focus();
+            calculator.PemdasOperatorActivated = false;
         }
         private void btn3_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "3";
             primTextBox.Focus();
+            calculator.PemdasOperatorActivated = false;
         }
         private void btn4_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "4";
             primTextBox.Focus();
+            calculator.PemdasOperatorActivated = false;
         }
         private void btn5_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "5";
             primTextBox.Focus();
+            calculator.PemdasOperatorActivated = false;
         }
         private void btn6_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "6";
             primTextBox.Focus();
+            calculator.PemdasOperatorActivated = false;
         }
         private void btn7_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "7";
             primTextBox.Focus();
+            calculator.PemdasOperatorActivated = false;
         }
         private void btn8_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "8";
             primTextBox.Focus();
+            calculator.PemdasOperatorActivated = false;
         }
         private void btn9_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "9";
             primTextBox.Focus();
+            calculator.PemdasOperatorActivated = false;
         }
         #endregion
 
@@ -83,6 +93,9 @@ namespace Scientific_Calculator.Controlers
         private void btnClear_Click(object sender, EventArgs e) {
             memTextBox.Text = string.Empty;
             primTextBox.Text = string.Empty;
+            calculator.PemdasOperatorActivated = false;
+            calculator.AnswerCalculated = false;
+            primTextBox.Focus();
         }
 
         private void btnCancel_Click(object sender, EventArgs e) {
@@ -165,13 +178,18 @@ namespace Scientific_Calculator.Controlers
         private void btnEquals_Click(object sender, EventArgs e) {
             // Result();
             calculator.CalculateResult();
-            primTextBox.Text = calculator.getPrim();
-            memTextBox.Text = calculator.getMem();
+            FillCalcInfo();
+            primTextBox.Focus();
+        }
+        private void btnSign_Click(object sender, EventArgs e) {
+            calculator.SignChange();
+            FillCalcInfo();
+            primTextBox.Focus();
         }
         private void btnDot_Click(object sender, EventArgs e) {
             calculator.DotPressed();
-            primTextBox.Text = calculator.getPrim();
-            memTextBox.Text = calculator.getMem();
+            FillCalcInfo();
+            primTextBox.Focus();
         }
         private void btnSqrt_Click(object sender, EventArgs e) {
             calculator.SqrtPressed(2);
@@ -190,6 +208,21 @@ namespace Scientific_Calculator.Controlers
         }
         private void btnPow3_Click(object sender, EventArgs e) {
             calculator.PowPressed(3);
+            FillCalcInfo();
+            primTextBox.Focus();
+        }
+        private void btnCos_Click(object sender, EventArgs e) {
+            calculator.CosPressed();
+            FillCalcInfo();
+            primTextBox.Focus();
+        }
+        private void btnSin_Click(object sender, EventArgs e) {
+            calculator.SinPressed();
+            FillCalcInfo();
+            primTextBox.Focus();
+        }
+        private void btnTan_Click(object sender, EventArgs e) {
+            calculator.TanPressed();
             FillCalcInfo();
             primTextBox.Focus();
         }
@@ -274,7 +307,5 @@ namespace Scientific_Calculator.Controlers
 
         private void btnExp_Click(object sender, EventArgs e) {
         }
-
-        
     }
 }

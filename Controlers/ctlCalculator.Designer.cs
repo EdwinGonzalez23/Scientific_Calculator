@@ -133,6 +133,7 @@
             this.btnTan.TabIndex = 62;
             this.btnTan.Text = "tan";
             this.btnTan.UseVisualStyleBackColor = true;
+            this.btnTan.Click += new System.EventHandler(this.btnTan_Click);
             // 
             // btnSub
             // 
@@ -182,6 +183,7 @@
             this.btnSin.TabIndex = 57;
             this.btnSin.Text = "sin";
             this.btnSin.UseVisualStyleBackColor = true;
+            this.btnSin.Click += new System.EventHandler(this.btnSin_Click);
             // 
             // btnCos
             // 
@@ -191,6 +193,7 @@
             this.btnCos.TabIndex = 56;
             this.btnCos.Text = "cos";
             this.btnCos.UseVisualStyleBackColor = true;
+            this.btnCos.Click += new System.EventHandler(this.btnCos_Click);
             // 
             // btnSqrt3
             // 
@@ -210,6 +213,7 @@
             this.btnSign.TabIndex = 54;
             this.btnSign.Text = "+/-";
             this.btnSign.UseVisualStyleBackColor = true;
+            this.btnSign.Click += new System.EventHandler(this.btnSign_Click);
             // 
             // btnDot
             // 
