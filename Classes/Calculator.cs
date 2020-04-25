@@ -85,12 +85,15 @@ namespace Scientific_Calculator.Classes
             double num = 0;
             switch (State()) {
                 case "OverridePrim":
+                    RemoveLastPrimOp();
                     num = Convert.ToDouble(PrimText);
                     break;
                 case "OverrideMem":
+                    RemoveLastMemOp();
                     num = Convert.ToDouble(MemText);
                     break;
                 case "Append":
+                    RemoveLastPrimOp();
                     num = Convert.ToDouble(PrimText);
                     for (int i = 0; i < pow; i++) {
                         MemText += ("" + num + "*");
@@ -226,6 +229,7 @@ namespace Scientific_Calculator.Classes
         private void Result() {
             MemText += PrimText;
             MemText = Regex.Replace(MemText, @"\s", ""); // Trim White Space
+            SanitizeUserInput();
             //if (!string.IsNullOrEmpty(Pow2Input))
             //    MemText = Regex.Replace(MemText, @"(\w*[0-9]\^2)", Pow2Input + "*" + Pow2Input);
             if (1 == 1) {
@@ -243,6 +247,13 @@ namespace Scientific_Calculator.Classes
                     }
                 }
             }
+        }
+        private void SanitizeUserInput() {
+            // Power 2
+            //List<string> str = Regex.Split(MemText, @"\d*(?= (\^2))");
+            //string[] word = Regex.Split(MemText, @"\d+(?=(\^2))");
+            //Match[] words = Regex.Matches(MemText, @"\d+(?=(\^2))").Cast<Match>().ToArray();
+            //Regex.Replace(MemText, @"\d+(?=(\^2))", "aaaa");
         }
         private string State() {
             if (!TextNotEmpty(MemText) && TextNotEmpty(PrimText)
@@ -332,6 +343,35 @@ namespace Scientific_Calculator.Classes
             }
             else {
                 return false;
+            }
+        }
+
+        public void ClearCalculator() {
+            PrimText = string.Empty;
+            MemText = string.Empty;
+            PemdasOperatorActivated = false;
+            AnswerCalculated = false;
+        }
+
+        public void RemoveLastPrimOp() {
+            char LastChar = ' ';
+            if (TextNotEmpty(PrimText)) {
+                 LastChar = PrimText[PrimText.Length - 1];
+
+                if (LastChar.Equals('^')) {
+                    PrimText = PrimText.TrimEnd(PrimText[PrimText.Length - 1]);
+                }
+            }
+        }
+
+        public void RemoveLastMemOp() {
+            char LastChar = ' ';
+            if (TextNotEmpty(MemText)) {
+                LastChar = MemText[MemText.Length - 1];
+
+                if (LastChar.Equals('^')) {
+                    MemText = MemText.TrimEnd(MemText[MemText.Length - 1]);
+                }
             }
         }
     }

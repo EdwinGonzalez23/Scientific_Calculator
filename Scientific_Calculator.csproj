@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Classes\Calculator.cs" />
     <Compile Include="Classes\CalculatorHelper.cs" />
+    <Compile Include="Classes\InputHandler.cs" />
     <Compile Include="Controlers\ctlCalculator.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -421,6 +421,7 @@
             this.memTextBox.Size = new System.Drawing.Size(467, 20);
             this.memTextBox.TabIndex = 32;
             this.memTextBox.TextChanged += new System.EventHandler(this.memTextBox_TextChanged);
+            this.memTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.memTextBox_KeyPress);
             // 
             // primTextBox
             // 
@@ -431,6 +432,7 @@
             this.primTextBox.TextChanged += new System.EventHandler(this.primTextBox_TextChanged);
             this.primTextBox.Enter += new System.EventHandler(this.primTextBox_Enter);
             this.primTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.primTextBox_KeyDown);
+            this.primTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.primTextBox_KeyPress);
             // 
             // ctlCalculator
             // 

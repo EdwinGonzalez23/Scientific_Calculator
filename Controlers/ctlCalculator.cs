@@ -20,6 +20,7 @@ namespace Scientific_Calculator.Controlers
         string SqrtInput;
         bool bSqrtSet = false;
         string LastNum = "0";
+        bool bPowerInput = false;
         Calculator calculator;
         public ctlCalculator() {
             InitializeComponent();
@@ -29,7 +30,8 @@ namespace Scientific_Calculator.Controlers
         #region numbers clicked
         private void btn0_Click(object sender, EventArgs e)
         {
-            primTextBox.Text += "0";
+            //primTextBox.Text += "0";
+            calculator.setPrim("0");
             primTextBox.Focus();
             calculator.PemdasOperatorActivated = false;
         }
@@ -91,10 +93,8 @@ namespace Scientific_Calculator.Controlers
 
         #region topthree
         private void btnClear_Click(object sender, EventArgs e) {
-            memTextBox.Text = string.Empty;
-            primTextBox.Text = string.Empty;
-            calculator.PemdasOperatorActivated = false;
-            calculator.AnswerCalculated = false;
+            calculator.ClearCalculator();
+            FillCalcInfo();
             primTextBox.Focus();
         }
 
@@ -129,16 +129,45 @@ namespace Scientific_Calculator.Controlers
         }
         #region Keyboard Listeners
         private void primTextBox_KeyDown(object sender, KeyEventArgs e) {
+            Console.WriteLine(e.KeyCode);
             switch (e.KeyCode) {
                 case Keys.Enter:
+                    SuppressKey(sender, e);
                     calculator.CalculateResult();
-                    primTextBox.Text = calculator.getPrim();
-                    memTextBox.Text = calculator.getMem();
-                    shiftCursor();
-                    e.Handled = true;
-                    e.SuppressKeyPress = true;
+                    FillCalcInfo();
+                    return;
+                case Keys.Add:
+                    SuppressKey(sender, e);
+                    btnAdd_Click(sender, e);
+                    return;
+                case Keys.Multiply:
+                    SuppressKey(sender, e);
+                    btnMult_Click(sender, e);
+                    return;
+                case Keys.Subtract:
+                    SuppressKey(sender, e);
+                    btnSub_Click(sender, e);
+                    return;
+                case Keys.Divide:
+                    SuppressKey(sender, e);
+                    btnDiv_Click(sender, e);
+                    return;
+                case Keys.D6:
+                    SuppressKey(sender, e);
+                    //calculator.RemoveLastPrimOp('^');
+                    btnExp_Click(sender, e);
+                    return;
+                case Keys.Escape:
+                    SuppressKey(sender, e);
+                    calculator.ClearCalculator();
+                    FillCalcInfo();
+                    primTextBox.Focus();
+                    return;
+                default:
+                    calculator.PemdasOperatorActivated = false;
                     break;
             }
+            shiftCursor();
         }
         private void primTextBox_Enter(object sender, EventArgs e) {
             shiftCursor();
@@ -296,16 +325,84 @@ namespace Scientific_Calculator.Controlers
             memTextBox.Text = calculator.getMem();
             labelInfo.Text = calculator.getLabel();
         }
-
+        string[] prenum = null;
+        Match[] pre = null;
+        string postnum = null;
+        Match[] words = null;
         private void primTextBox_TextChanged(object sender, EventArgs e) {
             calculator.setPrim(primTextBox.Text);
+            //string s = calculator.getPrim();
+            //string t = calculator.getPrim().Substring(Math.Max(0, calculator.getPrim().Length - 2));
+            //Regex regex = new Regex(@"\^[0-9]*");
+            //if (regex.IsMatch(t)) {
+            //    bPowerInput = true;
+            //    if (!calculator.PemdasOperatorActivated)
+            //        pre = Regex.Matches(calculator.getPrim(), @"\d+(?=(\^2))").Cast<Match>().ToArray();
+            //        //prenum = Regex.Split(calculator.getPrim(), @"\d +(?=(\^2))"); // All Values Before ^[number]
+            //    else if (calculator.PemdasOperatorActivated) {
+            //        postnum = calculator.getPrim().Substring(calculator.getPrim().IndexOf("^") + 1);
+            //        //words = Regex.Matches(calculator.getPrim(), @"\d+(?=(\^2))").Cast<Match>().ToArray();
+            //    }
+            //    // Grab Entire Word Before 2
+            //}
+            ////OperatorPhysicalPressed(sender.ToString(), sender, e);
         }
 
         private void memTextBox_TextChanged(object sender, EventArgs e) {
-            calculator.setMem(memTextBox.Text);
+            //calculator.setMem(memTextBox.Text);
         }
 
         private void btnExp_Click(object sender, EventArgs e) {
+            bool IsNum = false;
+            int exp = 0;
+            while (!IsNum) {
+                string exponent = Microsoft.VisualBasic.Interaction.InputBox("Enter Exponent", string.Empty, string.Empty, -1, -1);
+                if (int.TryParse(exponent, out exp) && exp >= 0) {
+                    IsNum = true;
+                }
+            }
+
+            calculator.PowPressed(exp);
+            FillCalcInfo();
+            primTextBox.Focus();
+        }
+        private void SuppressKey(object sender, KeyEventArgs e) {
+            e.Handled = true;
+            e.SuppressKeyPress = true;
+        }
+        private void OperatorPhysicalPressed(string str, object sender, EventArgs e) {
+            switch (str) {
+                case "+":
+                    btnAdd_Click(sender, e);
+                    break;
+            }
+        }
+
+        private void UserValidation() {
+
+        }
+
+        private void primTextBox_KeyPress(object sender, KeyPressEventArgs e) {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != '-')
+                && (e.KeyChar != '^')) {
+                e.Handled = true;
+            }
+
+            // only allow one decimal point
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1)) {
+                e.Handled = true;
+            }
+        }
+
+        private void memTextBox_KeyPress(object sender, KeyPressEventArgs e) {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != '-')) {
+                e.Handled = true;
+            }
+
+            // only allow one decimal point
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1)) {
+                e.Handled = true;
+            }
         }
     }
 }
