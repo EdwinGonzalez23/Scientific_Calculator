@@ -82,6 +82,7 @@ namespace Scientific_Calculator.Classes
             } else if (Double.IsNaN(Math.Log10(num) / 0.4342944819)) {
                 LabelText = "Please Enter a Valid Expression";
             } else {
+                result = Math.Log10(num) / 0.4342944819;
                 LabelText = "ln(" + num + ")";
                 MemText = result.ToString();
                 PrimText = string.Empty;
@@ -368,28 +369,6 @@ namespace Scientific_Calculator.Classes
             MemText = string.Empty;
             PemdasOperatorActivated = false;
             AnswerCalculated = false;
-        }
-
-        public void RemoveLastPrimOp() {
-            char LastChar = ' ';
-            if (TextNotEmpty(PrimText)) {
-                 LastChar = PrimText[PrimText.Length - 1];
-
-                if (LastChar.Equals('^')) {
-                    PrimText = PrimText.TrimEnd(PrimText[PrimText.Length - 1]);
-                }
-            }
-        }
-
-        public void RemoveLastMemOp() {
-            char LastChar = ' ';
-            if (TextNotEmpty(MemText)) {
-                LastChar = MemText[MemText.Length - 1];
-
-                if (LastChar.Equals('^')) {
-                    MemText = MemText.TrimEnd(MemText[MemText.Length - 1]);
-                }
-            }
         }
     }
 }

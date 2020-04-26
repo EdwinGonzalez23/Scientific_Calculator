@@ -15,12 +15,6 @@ namespace Scientific_Calculator.Controlers
 {
     public partial class ctlCalculator : UserControl
     {
-        string Pow2Input;
-        bool bPower2Set = true;
-        string SqrtInput;
-        bool bSqrtSet = false;
-        string LastNum = "0";
-        bool bPowerInput = false;
         Calculator calculator;
         public ctlCalculator() {
             InitializeComponent();
@@ -90,7 +84,7 @@ namespace Scientific_Calculator.Controlers
         }
         #endregion
 
-        #region topthree
+        #region Clear Cancel
         private void btnClear_Click(object sender, EventArgs e) {
             calculator.ClearCalculator();
             FillCalcInfo();
@@ -100,16 +94,23 @@ namespace Scientific_Calculator.Controlers
         private void btnCancel_Click(object sender, EventArgs e) {
             string str = primTextBox.Text;
             int len = str.Length;
-            if (len > 0)
+            if (len > 0) {
                 primTextBox.Text = (str.Substring(0, len - 1));
+                calculator.setPrim(primTextBox.Text);
+            }
+            primTextBox.Focus();
+        }
+        private void btnMemDel_Click(object sender, EventArgs e) {
+            string str = memTextBox.Text;
+            int len = str.Length;
+            if (len > 0) {
+                memTextBox.Text = (str.Substring(0, len - 1));
+                calculator.setMem(memTextBox.Text);
+            }
+            primTextBox.Focus();
         }
         #endregion
-        private bool validateExpression() {
-            string NoParenth = memTextBox.Text.Replace("(", "").Replace(")", "");
-            Regex regex = new Regex(@"^[-+]?([0-9]|\-?\d+\.\d)+([-+*/]+[-+]?([0-9]|\-?\d+\.\d)+)*$");
-            //Regex regex = new Regex(@"^[-+]?[0-9]+([-+*/]+[-+]?[0-9]+)*$");
-            return regex.IsMatch(NoParenth) ? true : false;
-        }
+ 
         private void shiftCursor() {
             primTextBox.SelectionStart = primTextBox.Text.Length + 1;
             primTextBox.SelectionLength = 0;
@@ -128,7 +129,7 @@ namespace Scientific_Calculator.Controlers
         }
         #region Keyboard Listeners
         private void primTextBox_KeyDown(object sender, KeyEventArgs e) {
-            Console.WriteLine(e.KeyCode);
+            //Console.WriteLine(e.KeyCode);
             switch (e.KeyCode) {
                 case Keys.Enter:
                     SuppressKey(sender, e);
@@ -147,6 +148,10 @@ namespace Scientific_Calculator.Controlers
                     SuppressKey(sender, e);
                     btnSub_Click(sender, e);
                     return;
+                case Keys.Delete:
+                    SuppressKey(sender, e);
+                    btnMemDel_Click(sender, e);
+                    return;
                 case Keys.Divide:
                     SuppressKey(sender, e);
                     btnDiv_Click(sender, e);
@@ -154,6 +159,26 @@ namespace Scientific_Calculator.Controlers
                 case Keys.D6:
                     SuppressKey(sender, e);
                     btnExp_Click(sender, e);
+                    return;
+                case Keys.L:
+                    SuppressKey(sender, e);
+                    btnLn_Click(sender, e);
+                    return;
+                case Keys.Q:
+                    SuppressKey(sender, e);
+                    SquareRoot();
+                    return;
+                case Keys.C:
+                    SuppressKey(sender, e);
+                    btnCos_Click(sender, e);
+                    return;
+                case Keys.T:
+                    SuppressKey(sender, e);
+                    btnTan_Click(sender, e);
+                    return;
+                case Keys.S:
+                    SuppressKey(sender, e);
+                    btnSin_Click(sender, e);
                     return;
                 case Keys.Escape:
                     SuppressKey(sender, e);
@@ -261,83 +286,6 @@ namespace Scientific_Calculator.Controlers
             FillCalcInfo();
             primTextBox.Focus();
         }
-        #endregion Non +*/- buttons
-        private bool TextNotEmpty(string str) {
-            if (!string.IsNullOrEmpty(str) || !string.IsNullOrWhiteSpace(str)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        private bool LastCharOperator(string str) {
-            if (TextNotEmpty(str)) {
-                int len = str.Length;
-                char chr = str[len - 1];
-                if (!Char.IsNumber(chr)) {
-                    return true;
-                }
-                else return false;
-            } else {
-                return false;
-            }
-            
-        }
-        #region ignore
-        private void AppendToMemBox(string op, bool flip) {
-            int len = 0;
-            char prevOp = ' ';
-            // If memBox not empty, create Previous Operator 
-            if (TextNotEmpty(memTextBox.Text)) {
-                len = memTextBox.Text.Length;
-                prevOp = (char)memTextBox.Text[len - 1];
-            }
-            // If MemBox and PrimaryBox are Empty Append a 0 op 
-            if (!TextNotEmpty(memTextBox.Text) && !TextNotEmpty(primTextBox.Text)) {
-                memTextBox.Text += 0;
-                memTextBox.Text += op;
-            }
-            // If Repeat Operator and user input, append operator
-            else if (prevOp.Equals(op[0]) && TextNotEmpty(primTextBox.Text)) {
-                InsertMemBox(!flip, op);
-            }
-            // If Not a Repeat Operator, Add New Operator and append number
-            else if (!prevOp.Equals(op[0]) && !Char.IsNumber(prevOp) && TextNotEmpty(primTextBox.Text)) {
-                InsertMemBox(!flip, op);
-            }
-            // If Not a Repeat and Mem Box has a number with no Operator, append operator in correct position
-            else if (!prevOp.Equals(op[0]) && Char.IsNumber(prevOp)) {
-                if (TextNotEmpty(primTextBox.Text)) {
-                    flip = false;
-                }
-                else if (!TextNotEmpty(primTextBox.Text)) {
-                    flip = true;
-                }
-                InsertMemBox(flip, op);
-            }
-            // Reset
-            primTextBox.Text = string.Empty;
-            primTextBox.SelectionStart = primTextBox.Text.Length + 1;
-            primTextBox.SelectionLength = 0;
-            primTextBox.Focus();
-        }
-        #endregion ignore
-        private void FillCalcInfo() {
-            primTextBox.Text = calculator.getPrim();
-            memTextBox.Text = calculator.getMem();
-            labelInfo.Text = calculator.getLabel();
-        }
-        string[] prenum = null;
-        Match[] pre = null;
-        string postnum = null;
-        Match[] words = null;
-        private void primTextBox_TextChanged(object sender, EventArgs e) {
-            calculator.setPrim(primTextBox.Text);
-        }
-
-        private void memTextBox_TextChanged(object sender, EventArgs e) {
-            //calculator.setMem(memTextBox.Text);
-        }
-
         private void btnExp_Click(object sender, EventArgs e) {
             bool IsNum = false;
             int exp = 0;
@@ -351,34 +299,65 @@ namespace Scientific_Calculator.Controlers
                 if (primTextBox.Text[primTextBox.TextLength - 1].Equals('^')) {
                     calculator.setPrim(primTextBox.Text.TrimEnd(primTextBox.Text[primTextBox.Text.Length - 1]));
                 }
+            }
+            catch (System.IndexOutOfRangeException ex) {
+                calculator.setLabel("Not a valid input");
+                return;
+            }
+
+            calculator.PowPressed(exp);
+            FillCalcInfo();
+            primTextBox.Focus();
+        }
+        private void SquareRoot() {
+            bool IsNum = false;
+            int square = 0;
+            while (!IsNum) {
+                string exponent = Microsoft.VisualBasic.Interaction.InputBox("Enter Root", string.Empty, string.Empty, -1, -1);
+                if (int.TryParse(exponent, out square) && square > 0) {
+                    IsNum = true;
+                }
+            }
+            try {
+                if (primTextBox.Text[primTextBox.TextLength - 1].Equals('q')) {
+                    calculator.setPrim(primTextBox.Text.TrimEnd(primTextBox.Text[primTextBox.Text.Length - 1]));
+                }
             } catch (System.IndexOutOfRangeException ex) {
                 calculator.setLabel("Not a valid input");
                 return;
             }
-            
-            calculator.PowPressed(exp);
+            calculator.SqrtPressed(square);
             FillCalcInfo();
             primTextBox.Focus();
+        }
+        #endregion Non +*/- buttons
+        private bool TextNotEmpty(string str) {
+            if (!string.IsNullOrEmpty(str) || !string.IsNullOrWhiteSpace(str)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        private void FillCalcInfo() {
+            primTextBox.Text = calculator.getPrim();
+            memTextBox.Text = calculator.getMem();
+            labelInfo.Text = calculator.getLabel();
+        }
+        private void primTextBox_TextChanged(object sender, EventArgs e) {
+            calculator.setPrim(primTextBox.Text);
+        }
+
+        private void memTextBox_TextChanged(object sender, EventArgs e) {
+            //calculator.setMem(memTextBox.Text);
         }
         private void SuppressKey(object sender, KeyEventArgs e) {
             e.Handled = true;
             e.SuppressKeyPress = true;
         }
-        private void OperatorPhysicalPressed(string str, object sender, EventArgs e) {
-            switch (str) {
-                case "+":
-                    btnAdd_Click(sender, e);
-                    break;
-            }
-        }
-
-        private void UserValidation() {
-
-        }
-
         private void primTextBox_KeyPress(object sender, KeyPressEventArgs e) {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != '-')
-                && (e.KeyChar != '^')) {
+                && (e.KeyChar != '^') && (e.KeyChar != 'l') && (e.KeyChar != 's')
+                && (e.KeyChar != 'q') && (e.KeyChar != 't') && (e.KeyChar != 'c')) {
                 e.Handled = true;
             } else {
                 calculator.setPrim(Convert.ToString(e.KeyChar));
@@ -387,25 +366,26 @@ namespace Scientific_Calculator.Controlers
             // only allow one decimal point
             if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1)) {
                 e.Handled = true;
-            } else {
+            } else if (char.IsControl(e.KeyChar) && char.IsDigit(e.KeyChar)) {
                 calculator.setPrim(Convert.ToString(e.KeyChar));
             }
 
         }
+        // FOR TESTING ONLY
+        //-----------------------------
+        //private void memTextBox_KeyPress(object sender, KeyPressEventArgs e) {
+        //    if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != '-')) {
+        //        e.Handled = true;
+        //    } else {
+        //        calculator.setMem(Convert.ToString(e.KeyChar));
+        //    }
 
-        private void memTextBox_KeyPress(object sender, KeyPressEventArgs e) {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != '-')) {
-                e.Handled = true;
-            } else {
-                calculator.setMem(Convert.ToString(e.KeyChar));
-            }
-
-            // only allow one decimal point
-            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1)) {
-                e.Handled = true;
-            } else {
-                calculator.setMem(Convert.ToString(e.KeyChar));
-            }
-        }
+        //    // only allow one decimal point
+        //    if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1)) {
+        //        e.Handled = true;
+        //    } else if (char.IsControl(e.KeyChar) && char.IsDigit(e.KeyChar)) {
+        //        calculator.setMem(Convert.ToString(e.KeyChar));
+        //    }
+        //}
     }
 }

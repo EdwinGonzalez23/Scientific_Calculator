@@ -62,12 +62,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.memTextBox = new System.Windows.Forms.TextBox();
             this.primTextBox = new System.Windows.Forms.TextBox();
+            this.btnMemDel = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.panel1.Controls.Add(this.btnMemDel);
             this.panel1.Controls.Add(this.labelInfo);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.btnTan);
@@ -397,7 +399,7 @@
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(158, 85);
+            this.btnClear.Location = new System.Drawing.Point(65, 85);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 34;
@@ -418,6 +420,7 @@
             // 
             this.memTextBox.Location = new System.Drawing.Point(65, 14);
             this.memTextBox.Name = "memTextBox";
+            this.memTextBox.ReadOnly = true;
             this.memTextBox.Size = new System.Drawing.Size(467, 20);
             this.memTextBox.TabIndex = 32;
             this.memTextBox.TextChanged += new System.EventHandler(this.memTextBox_TextChanged);
@@ -433,6 +436,16 @@
             this.primTextBox.Enter += new System.EventHandler(this.primTextBox_Enter);
             this.primTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.primTextBox_KeyDown);
             this.primTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.primTextBox_KeyPress);
+            // 
+            // btnMemDel
+            // 
+            this.btnMemDel.Location = new System.Drawing.Point(158, 85);
+            this.btnMemDel.Name = "btnMemDel";
+            this.btnMemDel.Size = new System.Drawing.Size(92, 23);
+            this.btnMemDel.TabIndex = 65;
+            this.btnMemDel.Text = "Mem Del One";
+            this.btnMemDel.UseVisualStyleBackColor = true;
+            this.btnMemDel.Click += new System.EventHandler(this.btnMemDel_Click);
             // 
             // ctlCalculator
             // 
@@ -483,5 +496,6 @@
         private System.Windows.Forms.Button btnDiv;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelInfo;
+        private System.Windows.Forms.Button btnMemDel;
     }
 }
