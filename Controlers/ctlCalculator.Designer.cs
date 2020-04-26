@@ -424,7 +424,7 @@
             this.memTextBox.Size = new System.Drawing.Size(467, 20);
             this.memTextBox.TabIndex = 32;
             this.memTextBox.TextChanged += new System.EventHandler(this.memTextBox_TextChanged);
-            this.memTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.memTextBox_KeyPress);
+            //this.memTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.memTextBox_KeyPress);
             // 
             // primTextBox
             // 
