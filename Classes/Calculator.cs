@@ -75,26 +75,43 @@ namespace Scientific_Calculator.Classes
                     return;
                 default:
                     break;
-            } 
-            double result = Math.Log10(num) / 0.4342944819;
-            LabelText = "ln(" + num + ")";
-            MemText = result.ToString();
-            PrimText = string.Empty;
+            }
+            double result = 0;// Math.Log10(num) / 0.4342944819;
+            if (Double.IsInfinity(Math.Log10(num) / 0.4342944819)) {
+                LabelText = "Please Enter a Valid Expression";
+            } else if (Double.IsNaN(Math.Log10(num) / 0.4342944819)) {
+                LabelText = "Please Enter a Valid Expression";
+            } else {
+                LabelText = "ln(" + num + ")";
+                MemText = result.ToString();
+                PrimText = string.Empty;
+            }
         }
         public void PowPressed(int pow) {
             double num = 0;
             switch (State()) {
                 case "OverridePrim":
-                    RemoveLastPrimOp();
-                    num = Convert.ToDouble(PrimText);
+                    try {
+                        num = Convert.ToDouble(PrimText);
+                    } catch {
+                        LabelText = "Please Enter a Valid Expression";
+                        return;
+                    }
                     break;
                 case "OverrideMem":
-                    RemoveLastMemOp();
-                    num = Convert.ToDouble(MemText);
+                    try {
+                        num = Convert.ToDouble(MemText);
+                    } catch {
+                        return;
+                    }
                     break;
                 case "Append":
-                    RemoveLastPrimOp();
-                    num = Convert.ToDouble(PrimText);
+                    try {
+                        num = Convert.ToDouble(PrimText);
+                    } catch {
+                        LabelText = "Please Enter a Valid Expression";
+                        return;
+                    }
                     for (int i = 0; i < pow; i++) {
                         MemText += ("" + num + "*");
                     }
@@ -103,7 +120,7 @@ namespace Scientific_Calculator.Classes
                     Result();
                     return;
                 case "Abort":
-                    LabelText = "Please Enter a Valid Expression";
+                    
                     return;
                 default:
                     break;
@@ -223,15 +240,16 @@ namespace Scientific_Calculator.Classes
             MemText = result.ToString();
             PrimText = string.Empty;
         }
-        public void ExpPressed(int exp) {
-
-        }
         private void Result() {
+
+            // Enter Hit But No Operator (Just Override)
+            if (TextNotEmpty(MemText) && TextNotEmpty(PrimText) && !LastCharOperator(MemText) && !LastCharOperator(PrimText)) {
+                MemText = PrimText;
+                PrimText = string.Empty;
+                return;
+            }
             MemText += PrimText;
             MemText = Regex.Replace(MemText, @"\s", ""); // Trim White Space
-            SanitizeUserInput();
-            //if (!string.IsNullOrEmpty(Pow2Input))
-            //    MemText = Regex.Replace(MemText, @"(\w*[0-9]\^2)", Pow2Input + "*" + Pow2Input);
             if (1 == 1) {
                 string exp = MemText;
                 try {
@@ -242,18 +260,11 @@ namespace Scientific_Calculator.Classes
                     AnswerCalculated = true;
                 }
                 catch (Exception ex) {
-                    if (ex is DivideByZeroException || ex is OverflowException) {
-                        LabelText = "Infinity/NaN";
+                    if (ex is DivideByZeroException || ex is OverflowException || ex is SyntaxErrorException) {
+                        LabelText = "Infinity/NaN/Syntax Error";
                     }
                 }
             }
-        }
-        private void SanitizeUserInput() {
-            // Power 2
-            //List<string> str = Regex.Split(MemText, @"\d*(?= (\^2))");
-            //string[] word = Regex.Split(MemText, @"\d+(?=(\^2))");
-            //Match[] words = Regex.Matches(MemText, @"\d+(?=(\^2))").Cast<Match>().ToArray();
-            //Regex.Replace(MemText, @"\d+(?=(\^2))", "aaaa");
         }
         private string State() {
             if (!TextNotEmpty(MemText) && TextNotEmpty(PrimText)
@@ -261,6 +272,9 @@ namespace Scientific_Calculator.Classes
                 return "OverridePrim";
             } else if ((TextNotEmpty(MemText) && !TextNotEmpty(PrimText) && !LastCharOperator(MemText))) {
                 return "OverrideMem";
+            }
+            else if ((TextNotEmpty(MemText) && !TextNotEmpty(PrimText) && LastCharOperator(MemText))) {
+                return "Abort";
             }
             else if (TextNotEmpty(PrimText) && TextNotEmpty(MemText) && LastCharOperator(MemText)) {
                 return "Append";
@@ -299,29 +313,32 @@ namespace Scientific_Calculator.Classes
          *  Example: 3++3 repeats the + operator twice. 
          */
         private void AppendToMem(string Operator) {
-
-            if (!PemdasOperatorActivated) {
-                if (!TextNotEmpty(MemText) && !TextNotEmpty(PrimText)) {
-                    MemText += (0 + Operator);
-                    PrimText = string.Empty;
-                    PemdasOperatorActivated = true;
-                }
-                else if (!AnswerCalculated) {
-                    MemText += (PrimText + Operator);
-                    PrimText = string.Empty;
-                    PemdasOperatorActivated = true;
-                }
-                else if (AnswerCalculated) {
-                    if (!TextNotEmpty(PrimText)) {
-                        MemText += (PrimText + Operator);
+            switch (State()) {
+                case "OverridePrim":
+                    if (TextNotEmpty(MemText) && !LastCharOperator(MemText)) {
+                        MemText = (PrimText + Operator);
                         PrimText = string.Empty;
-                        AnswerCalculated = false;
                     } else {
-                        MemText += (Operator + PrimText);
+                        MemText = (PrimText + Operator);
                         PrimText = string.Empty;
                     }
-                    PemdasOperatorActivated = false;
-                }
+                    break;
+                case "OverrideMem":
+                    MemText += (PrimText + Operator);
+                    PrimText = string.Empty;
+                    break;
+                case "Append":
+                    MemText += (PrimText + Operator);
+                    PrimText = string.Empty;
+                    return;
+                case "Abort":
+                    LabelText = "Please Enter a Valid Expression";
+                    return;
+                case "none":
+                    MemText = "0" + Operator;
+                    break;
+                default:
+                    break;
             }
         }
         private bool TextNotEmpty(string str) {
