@@ -296,7 +296,7 @@ namespace Scientific_Calculator.Controlers
                 }
             }
             try {
-                if (primTextBox.Text[primTextBox.TextLength - 1].Equals('^')) {
+                if (TextNotEmpty(primTextBox.Text) && primTextBox.Text[primTextBox.TextLength - 1].Equals('^')) {
                     calculator.setPrim(primTextBox.Text.TrimEnd(primTextBox.Text[primTextBox.Text.Length - 1]));
                 }
             }

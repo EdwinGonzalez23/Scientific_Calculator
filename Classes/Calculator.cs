@@ -98,25 +98,17 @@ namespace Scientific_Calculator.Classes
             double num = 0;
             switch (State()) {
                 case "OverridePrim":
-                    try {
-                        num = Convert.ToDouble(PrimText);
-                    } catch {
-                        LabelText = "Please Enter a Valid Expression";
+                    if (!IsValidDouble(out num, PrimText)) {
                         return;
                     }
                     break;
                 case "OverrideMem":
-                    try {
-                        num = Convert.ToDouble(MemText);
-                    } catch {
+                    if (!IsValidDouble(out num, MemText)) {
                         return;
                     }
                     break;
                 case "Append":
-                    try {
-                        num = Convert.ToDouble(PrimText);
-                    } catch {
-                        LabelText = "Please Enter a Valid Expression";
+                    if (!IsValidDouble(out num, PrimText)) {
                         return;
                     }
                     for (int i = 0; i < pow; i++) {
@@ -127,33 +119,40 @@ namespace Scientific_Calculator.Classes
                     Result();
                     return;
                 case "Abort":
-                    
+                    LabelText = "Please Enter a Valid Expression";
                     return;
                 default:
                     break;
             }
-
-            double result = Math.Pow(num, pow);
-            LabelText = "Math.Pow(" + num + "," + pow + ")";
-            MemText = result.ToString();
-            PrimText = string.Empty;
+            if (IsValidExpression(out double result, Math.Pow(num, pow))) {
+                LabelText = "Math.Pow(" + num + "," + pow + ")";
+                MemText = result.ToString();
+                PrimText = string.Empty;
+            }
         }
 
         public void SqrtPressed(int root) {
             double num = 0;
             switch (State()) {
                 case "OverridePrim":
-                    num = Convert.ToDouble(PrimText);
+                    if (!IsValidDouble(out num, PrimText)) {
+                        return;
+                    }
                     break;
                 case "OverrideMem":
-                    num = Convert.ToDouble(MemText);
+                    if (!IsValidDouble(out num, MemText)) {
+                        return;
+                    }
                     break;
                 case "Append":
-                    num = Convert.ToDouble(PrimText);
-                    double tmpResult = Math.Ceiling(Math.Pow(num, (double)1 / root));
-                    MemText += tmpResult.ToString();
-                    PrimText = string.Empty;
-                    Result();
+                    if (!IsValidDouble(out num, PrimText)) {
+                        return;
+                    }
+                    if (IsValidExpression(out double tmpResult, Math.Ceiling(Math.Pow(num, (double)1 / root)))) {
+                        MemText += tmpResult.ToString();
+                        PrimText = string.Empty;
+                        Result();
+                    }
                     return;
                 case "Abort":
                     LabelText = "Please Enter a Valid Expression";
@@ -161,26 +160,35 @@ namespace Scientific_Calculator.Classes
                 default:
                     break;
             }
-            LabelText = "Math.Pow(" + num + ", (" + 1 + "/" + root + "))";
-            double result = Math.Ceiling(Math.Pow(num, (double)1 / root));
-            MemText = result.ToString();
-            PrimText = string.Empty;
+            if (IsValidExpression(out double result, Math.Ceiling(Math.Pow(num, (double)1 / root)))) {
+                LabelText = "Math.Pow(" + num + ", (" + 1 + "/" + root + "))";
+                MemText = result.ToString();
+                PrimText = string.Empty;
+            }
         }
         public void CosPressed() {
             double num = 0;
             switch (State()) {
                 case "OverridePrim":
-                    num = Convert.ToDouble(PrimText);
+                    if (!IsValidDouble(out num, PrimText)) {
+                        return;
+                    }
                     break;
                 case "OverrideMem":
-                    num = Convert.ToDouble(MemText);
+                    if (!IsValidDouble(out num, MemText)) {
+                        return;
+                    }
                     break;
                 case "Append":
-                    num = Convert.ToDouble(PrimText);
-                    double tmpResult = Math.Cos(num);
-                    MemText += tmpResult.ToString();
-                    PrimText = string.Empty;
-                    Result();
+                    if (!IsValidDouble(out num, PrimText)) {
+                        return;
+                    }
+                    if (IsValidExpression(out double tmpResult, Math.Cos(num * (Math.PI / 180)))) {
+                        MemText += tmpResult.ToString();
+                        PrimText = string.Empty;
+                        Result();
+                    }
+                    //double tmpResult = Math.Cos(num);
                     return;
                 case "Abort":
                     LabelText = "Please Enter a Valid Expression";
@@ -188,26 +196,34 @@ namespace Scientific_Calculator.Classes
                 default:
                     break;
             }
-            LabelText = "Math.Cos(" + num + ")";
-            double result = Math.Cos(num);
-            MemText = result.ToString();
-            PrimText = string.Empty;
+            if (IsValidExpression(out double result, Math.Cos(num*(Math.PI/180)))) {
+                LabelText = "Math.Cos(" + num + ")";
+                MemText = result.ToString();
+                PrimText = string.Empty;
+            }
         }
         public void SinPressed() {
             double num = 0;
             switch (State()) {
                 case "OverridePrim":
-                    num = Convert.ToDouble(PrimText);
+                    if (!IsValidDouble(out num, PrimText)) {
+                        return;
+                    }
                     break;
                 case "OverrideMem":
-                    num = Convert.ToDouble(MemText);
+                    if (!IsValidDouble(out num, MemText)) {
+                        return;
+                    }
                     break;
                 case "Append":
-                    num = Convert.ToDouble(PrimText);
-                    double tmpResult = Math.Sin(num);
-                    MemText += tmpResult.ToString();
-                    PrimText = string.Empty;
-                    Result();
+                    if (!IsValidDouble(out num, PrimText)) {
+                        return;
+                    }
+                    if (IsValidExpression(out double tmpResult, Math.Sin(num*Math.PI/180))) {
+                        MemText += tmpResult.ToString();
+                        PrimText = string.Empty;
+                        Result();
+                    }
                     return;
                 case "Abort":
                     LabelText = "Please Enter a Valid Expression";
@@ -215,26 +231,34 @@ namespace Scientific_Calculator.Classes
                 default:
                     break;
             }
-            LabelText = "Math.Sin(" + num + ")";
-            double result = Math.Sin(num);
-            MemText = result.ToString();
-            PrimText = string.Empty;
+            if (IsValidExpression(out double result, Math.Sin(num * Math.PI / 180))) {
+                LabelText = "Math.Sin(" + num + ")";
+                MemText = result.ToString();
+                PrimText = string.Empty;
+            }
         }
         public void TanPressed() {
             double num = 0;
             switch (State()) {
                 case "OverridePrim":
-                    num = Convert.ToDouble(PrimText);
+                    if (!IsValidDouble(out num, PrimText)) {
+                        return;
+                    }
                     break;
                 case "OverrideMem":
-                    num = Convert.ToDouble(MemText);
+                    if (!IsValidDouble(out num, MemText)) {
+                        return;
+                    }
                     break;
                 case "Append":
-                    num = Convert.ToDouble(PrimText);
-                    double tmpResult = Math.Tan(num);
-                    MemText += tmpResult.ToString();
-                    PrimText = string.Empty;
-                    Result();
+                    if (!IsValidDouble(out num, PrimText)) {
+                        return;
+                    }
+                    if (IsValidExpression(out double tmpResult, Math.Tan(num*Math.PI/180))) {
+                        MemText += tmpResult.ToString();
+                        PrimText = string.Empty;
+                        Result();
+                    }
                     return;
                 case "Abort":
                     LabelText = "Please Enter a Valid Expression";
@@ -242,10 +266,11 @@ namespace Scientific_Calculator.Classes
                 default:
                     break;
             }
-            LabelText = "Math.Tan(" + num + ")";
-            double result = Math.Tan(num);
-            MemText = result.ToString();
-            PrimText = string.Empty;
+            if (IsValidExpression(out double result, Math.Tan(num * Math.PI / 180))) {
+                LabelText = "Math.Tan(" + num + ")";
+                MemText = result.ToString();
+                PrimText = string.Empty;
+            }
         }
         private void Result() {
 
@@ -257,21 +282,28 @@ namespace Scientific_Calculator.Classes
             }
             MemText += PrimText;
             MemText = Regex.Replace(MemText, @"\s", ""); // Trim White Space
-            if (1 == 1) {
-                string exp = MemText;
-                try {
-                    var result = new DataTable().Compute(exp, null);
-                    LabelText = "Expression: " + MemText;
-                    MemText = result.ToString();
-                    PrimText = string.Empty;
-                    AnswerCalculated = true;
+            string exp = MemText;
+            try {
+                var result = new DataTable().Compute(exp, null);
+                if (Double.IsInfinity(Convert.ToDouble(result))) {
+                    LabelText = "Please Enter a Valid Expression";
+                    return;
                 }
-                catch (Exception ex) {
-                    if (ex is DivideByZeroException || ex is OverflowException || ex is SyntaxErrorException) {
-                        LabelText = "Infinity/NaN/Syntax Error";
-                    }
+                else if (Double.IsNaN(Convert.ToDouble(result))) {
+                    LabelText = "Please Enter a Valid Expression";
+                    return;
+                }
+                LabelText = "Expression: " + MemText;
+                MemText = result.ToString();
+                PrimText = string.Empty;
+                AnswerCalculated = true;
+            }
+            catch (Exception ex) {
+                if (ex is DivideByZeroException || ex is OverflowException || ex is SyntaxErrorException) {
+                    LabelText = "Infinity/NaN/Syntax Error";
                 }
             }
+            
         }
         private string State() {
             if (!TextNotEmpty(MemText) && TextNotEmpty(PrimText)
