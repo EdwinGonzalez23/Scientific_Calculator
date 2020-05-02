@@ -56,19 +56,30 @@ namespace Scientific_Calculator.Classes
             double num = 0;
             switch (State()) {
                 case "OverridePrim":
-                    if (!PemdasOperatorActivated)
-                        num = Convert.ToDouble(PrimText);
+                    if (!PemdasOperatorActivated) {
+                        if (!IsValidDouble(out num, PrimText)) {
+                            return;
+                        }
+                    }
                     break;
                 case "OverrideMem":
-                    if (!PemdasOperatorActivated)
-                        num = Convert.ToDouble(MemText);
+                    if (!PemdasOperatorActivated) {
+                        if (!IsValidDouble(out num, MemText)) {
+                            return;
+                        }
+                    }
+                    //num = Convert.ToDouble(MemText);
                     break;
                 case "Append":
-                    num = Convert.ToDouble(PrimText);
-                    double tmpResult = Math.Log10(num) / 0.4342944819;
-                    MemText += tmpResult.ToString();
-                    PrimText = string.Empty;
-                    Result();
+                    if (!IsValidDouble(out num, PrimText)) {
+                        return;
+                    }
+                    //num = Convert.ToDouble(PrimText);
+                    if (IsValidExpression(out double tmpResult, Math.Log10(num) / 0.4342944819)) {
+                        MemText += tmpResult.ToString();
+                        PrimText = string.Empty;
+                        Result();
+                    }
                     return;
                 case "Abort":
                     LabelText = "Please Enter a Valid Expression";
@@ -76,13 +87,8 @@ namespace Scientific_Calculator.Classes
                 default:
                     break;
             }
-            double result = 0;// Math.Log10(num) / 0.4342944819;
-            if (Double.IsInfinity(Math.Log10(num) / 0.4342944819)) {
-                LabelText = "Please Enter a Valid Expression";
-            } else if (Double.IsNaN(Math.Log10(num) / 0.4342944819)) {
-                LabelText = "Please Enter a Valid Expression";
-            } else {
-                result = Math.Log10(num) / 0.4342944819;
+            // Math.Log10(num) / 0.4342944819;
+            if (IsValidExpression(out double result, Math.Log10(num) / 0.4342944819)) {
                 LabelText = "ln(" + num + ")";
                 MemText = result.ToString();
                 PrimText = string.Empty;
@@ -369,6 +375,33 @@ namespace Scientific_Calculator.Classes
             MemText = string.Empty;
             PemdasOperatorActivated = false;
             AnswerCalculated = false;
+        }
+
+        private bool IsValidDouble(out double num, string expression) {
+            try {
+                num = Convert.ToDouble(expression);
+            }
+            catch {
+                LabelText = "Please Enter a Valid Expression";
+                num = 0;
+                return false;
+            }
+            return true;
+        }
+        
+        private bool IsValidExpression(out double result, double expression) {
+            if (Double.IsInfinity(expression)) {
+                LabelText = "Please Enter a Valid Expression";
+                result = 0;
+                return false;
+            }
+            else if (Double.IsNaN(expression)) {
+                LabelText = "Please Enter a Valid Expression";
+                result = 0;
+                return false;
+            }
+            result = expression;
+            return true;
         }
     }
 }
