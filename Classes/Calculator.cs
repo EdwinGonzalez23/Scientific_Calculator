@@ -301,6 +301,7 @@ namespace Scientific_Calculator.Classes
             catch (Exception ex) {
                 if (ex is DivideByZeroException || ex is OverflowException || ex is SyntaxErrorException) {
                     LabelText = "Infinity/NaN/Syntax Error";
+                    PrimText = string.Empty;
                 }
             }
             

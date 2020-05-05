@@ -10,15 +10,18 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Scientific_Calculator.Classes;
 using Scientific_Calculator.Popups;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Scientific_Calculator.Controlers
 {
     public partial class ctlCalculator : UserControl
     {
         Calculator calculator;
+        Functions functions;
         public ctlCalculator() {
             InitializeComponent();
             calculator = new Calculator();
+            functions = new Functions();
         }
 
         #region numbers clicked
@@ -79,6 +82,16 @@ namespace Scientific_Calculator.Controlers
         private void btn9_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "9";
+            primTextBox.Focus();
+            calculator.PemdasOperatorActivated = false;
+        }
+        private void btnLeftPara_Click(object sender, EventArgs e) {
+            primTextBox.Text += "(";
+            primTextBox.Focus();
+            calculator.PemdasOperatorActivated = false;
+        }
+        private void btnRightPara_Click(object sender, EventArgs e) {
+            primTextBox.Text += ")";
             primTextBox.Focus();
             calculator.PemdasOperatorActivated = false;
         }
@@ -357,7 +370,8 @@ namespace Scientific_Calculator.Controlers
         private void primTextBox_KeyPress(object sender, KeyPressEventArgs e) {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != '-')
                 && (e.KeyChar != '^') && (e.KeyChar != 'l') && (e.KeyChar != 's')
-                && (e.KeyChar != 'q') && (e.KeyChar != 't') && (e.KeyChar != 'c')) {
+                && (e.KeyChar != 'q') && (e.KeyChar != 't') && (e.KeyChar != 'c')
+                && (e.KeyChar != '(') && (e.KeyChar != ')')) {
                 e.Handled = true;
             } else {
                 calculator.setPrim(Convert.ToString(e.KeyChar));
@@ -370,6 +384,63 @@ namespace Scientific_Calculator.Controlers
                 calculator.setPrim(Convert.ToString(e.KeyChar));
             }
 
+        }
+
+        private void btnFuncCreate_Click(object sender, EventArgs e) {
+            bool exit = false;
+            while (!exit) {
+                string function = Microsoft.VisualBasic.Interaction.InputBox("Enter Function: f(x) = [your input]", string.Empty, string.Empty, -1, -1);
+                if (function.Equals("")) {
+                    break;
+                }
+                if (TextNotEmpty(function)) {
+                    if (functions.CreateFunction(function)) {
+                        FillFunctionCbo();
+                        exit = true;
+                    } else {
+                        MessageBox.Show("Invalid Expression", "Invalid Expressionz", MessageBoxButtons.OK);
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void FillFunctionCbo() {
+            cboFunctions.DataSource = null;
+            cboFunctions.DataSource = functions.GetFunctions();
+        }
+
+        private void btnFuncComp_Click(object sender, EventArgs e) {
+            bool exit = false;
+            int variable = 0;
+            if (cboFunctions.Items.Count > 0) {
+                while (!exit) {
+                    string var = Microsoft.VisualBasic.Interaction.InputBox("Enter integer X", string.Empty, string.Empty, -1, -1);
+                    if (var.Equals("")) {
+                        break;
+                    }
+                    if (TextNotEmpty(var)) {
+                        exit = int.TryParse(var, out variable);
+                    }
+                }
+                double result = functions.ComputeFunction(cboFunctions.Text, variable);
+                calculator.setMem(Convert.ToString(result));
+                calculator.setPrim(string.Empty);
+                calculator.setLabel(String.Format("f({0}) = {1}", variable, cboFunctions.Text));
+                FillCalcInfo();
+            } else {
+                MessageBox.Show("No Functions Exist", "Warning", MessageBoxButtons.OK);
+            }
+        }
+
+        private void btnGraph_Click(object sender, EventArgs e) {
+            ChartForm form = new ChartForm();
+            if (cboFunctions.Items.Count > 0) {
+                form.SetLegendText(cboFunctions.Text);
+                form.SetGraphType("line");
+                form.SetDataPoints(cboFunctions.Text);
+                form.Show();
+            }
         }
         // FOR TESTING ONLY
         //-----------------------------

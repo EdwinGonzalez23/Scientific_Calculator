@@ -36,17 +36,17 @@
             this.ctlCalculator1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ctlCalculator1.Location = new System.Drawing.Point(0, 0);
             this.ctlCalculator1.Name = "ctlCalculator1";
-            this.ctlCalculator1.Size = new System.Drawing.Size(537, 341);
+            this.ctlCalculator1.Size = new System.Drawing.Size(669, 341);
             this.ctlCalculator1.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(537, 341);
+            this.ClientSize = new System.Drawing.Size(669, 341);
             this.Controls.Add(this.ctlCalculator1);
             this.Name = "MainForm";
-            this.Text = "MainForm";
+            this.Text = "Calculator";
             this.ResumeLayout(false);
 
         }

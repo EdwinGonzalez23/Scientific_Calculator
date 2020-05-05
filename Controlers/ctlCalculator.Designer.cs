@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnRightPara = new System.Windows.Forms.Button();
+            this.btnLeftPara = new System.Windows.Forms.Button();
+            this.btnMemDel = new System.Windows.Forms.Button();
             this.labelInfo = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnTan = new System.Windows.Forms.Button();
@@ -62,13 +65,22 @@
             this.label1 = new System.Windows.Forms.Label();
             this.memTextBox = new System.Windows.Forms.TextBox();
             this.primTextBox = new System.Windows.Forms.TextBox();
-            this.btnMemDel = new System.Windows.Forms.Button();
+            this.btnFuncCreate = new System.Windows.Forms.Button();
+            this.cboFunctions = new System.Windows.Forms.ComboBox();
+            this.btnFuncComp = new System.Windows.Forms.Button();
+            this.btnGraph = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.panel1.Controls.Add(this.btnGraph);
+            this.panel1.Controls.Add(this.btnFuncComp);
+            this.panel1.Controls.Add(this.cboFunctions);
+            this.panel1.Controls.Add(this.btnFuncCreate);
+            this.panel1.Controls.Add(this.btnRightPara);
+            this.panel1.Controls.Add(this.btnLeftPara);
             this.panel1.Controls.Add(this.btnMemDel);
             this.panel1.Controls.Add(this.labelInfo);
             this.panel1.Controls.Add(this.label2);
@@ -106,8 +118,38 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(549, 350);
+            this.panel1.Size = new System.Drawing.Size(684, 350);
             this.panel1.TabIndex = 0;
+            // 
+            // btnRightPara
+            // 
+            this.btnRightPara.Location = new System.Drawing.Point(443, 85);
+            this.btnRightPara.Name = "btnRightPara";
+            this.btnRightPara.Size = new System.Drawing.Size(75, 23);
+            this.btnRightPara.TabIndex = 67;
+            this.btnRightPara.Text = ")";
+            this.btnRightPara.UseVisualStyleBackColor = true;
+            this.btnRightPara.Click += new System.EventHandler(this.btnRightPara_Click);
+            // 
+            // btnLeftPara
+            // 
+            this.btnLeftPara.Location = new System.Drawing.Point(350, 85);
+            this.btnLeftPara.Name = "btnLeftPara";
+            this.btnLeftPara.Size = new System.Drawing.Size(75, 23);
+            this.btnLeftPara.TabIndex = 66;
+            this.btnLeftPara.Text = "(";
+            this.btnLeftPara.UseVisualStyleBackColor = true;
+            this.btnLeftPara.Click += new System.EventHandler(this.btnLeftPara_Click);
+            // 
+            // btnMemDel
+            // 
+            this.btnMemDel.Location = new System.Drawing.Point(158, 85);
+            this.btnMemDel.Name = "btnMemDel";
+            this.btnMemDel.Size = new System.Drawing.Size(92, 23);
+            this.btnMemDel.TabIndex = 65;
+            this.btnMemDel.Text = "Mem Del One";
+            this.btnMemDel.UseVisualStyleBackColor = true;
+            this.btnMemDel.Click += new System.EventHandler(this.btnMemDel_Click);
             // 
             // labelInfo
             // 
@@ -199,7 +241,7 @@
             // 
             // btnSqrt3
             // 
-            this.btnSqrt3.Location = new System.Drawing.Point(65, 299);
+            this.btnSqrt3.Location = new System.Drawing.Point(65, 253);
             this.btnSqrt3.Name = "btnSqrt3";
             this.btnSqrt3.Size = new System.Drawing.Size(75, 23);
             this.btnSqrt3.TabIndex = 55;
@@ -339,7 +381,7 @@
             // 
             // btnPow2
             // 
-            this.btnPow2.Location = new System.Drawing.Point(65, 253);
+            this.btnPow2.Location = new System.Drawing.Point(65, 299);
             this.btnPow2.Name = "btnPow2";
             this.btnPow2.Size = new System.Drawing.Size(75, 23);
             this.btnPow2.TabIndex = 40;
@@ -379,9 +421,9 @@
             // 
             // btnEquals
             // 
-            this.btnEquals.Location = new System.Drawing.Point(350, 85);
+            this.btnEquals.Location = new System.Drawing.Point(536, 299);
             this.btnEquals.Name = "btnEquals";
-            this.btnEquals.Size = new System.Drawing.Size(168, 23);
+            this.btnEquals.Size = new System.Drawing.Size(121, 23);
             this.btnEquals.TabIndex = 36;
             this.btnEquals.Text = "=";
             this.btnEquals.UseVisualStyleBackColor = true;
@@ -424,7 +466,6 @@
             this.memTextBox.Size = new System.Drawing.Size(467, 20);
             this.memTextBox.TabIndex = 32;
             this.memTextBox.TextChanged += new System.EventHandler(this.memTextBox_TextChanged);
-            //this.memTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.memTextBox_KeyPress);
             // 
             // primTextBox
             // 
@@ -437,15 +478,43 @@
             this.primTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.primTextBox_KeyDown);
             this.primTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.primTextBox_KeyPress);
             // 
-            // btnMemDel
+            // btnFuncCreate
             // 
-            this.btnMemDel.Location = new System.Drawing.Point(158, 85);
-            this.btnMemDel.Name = "btnMemDel";
-            this.btnMemDel.Size = new System.Drawing.Size(92, 23);
-            this.btnMemDel.TabIndex = 65;
-            this.btnMemDel.Text = "Mem Del One";
-            this.btnMemDel.UseVisualStyleBackColor = true;
-            this.btnMemDel.Click += new System.EventHandler(this.btnMemDel_Click);
+            this.btnFuncCreate.Location = new System.Drawing.Point(536, 175);
+            this.btnFuncCreate.Name = "btnFuncCreate";
+            this.btnFuncCreate.Size = new System.Drawing.Size(121, 23);
+            this.btnFuncCreate.TabIndex = 68;
+            this.btnFuncCreate.Text = "Create Function";
+            this.btnFuncCreate.UseVisualStyleBackColor = true;
+            this.btnFuncCreate.Click += new System.EventHandler(this.btnFuncCreate_Click);
+            // 
+            // cboFunctions
+            // 
+            this.cboFunctions.FormattingEnabled = true;
+            this.cboFunctions.Location = new System.Drawing.Point(536, 253);
+            this.cboFunctions.Name = "cboFunctions";
+            this.cboFunctions.Size = new System.Drawing.Size(121, 21);
+            this.cboFunctions.TabIndex = 69;
+            // 
+            // btnFuncComp
+            // 
+            this.btnFuncComp.Location = new System.Drawing.Point(536, 214);
+            this.btnFuncComp.Name = "btnFuncComp";
+            this.btnFuncComp.Size = new System.Drawing.Size(121, 23);
+            this.btnFuncComp.TabIndex = 70;
+            this.btnFuncComp.Text = "Compute Function";
+            this.btnFuncComp.UseVisualStyleBackColor = true;
+            this.btnFuncComp.Click += new System.EventHandler(this.btnFuncComp_Click);
+            // 
+            // btnGraph
+            // 
+            this.btnGraph.Location = new System.Drawing.Point(536, 129);
+            this.btnGraph.Name = "btnGraph";
+            this.btnGraph.Size = new System.Drawing.Size(121, 23);
+            this.btnGraph.TabIndex = 71;
+            this.btnGraph.Text = "Graph Function";
+            this.btnGraph.UseVisualStyleBackColor = true;
+            this.btnGraph.Click += new System.EventHandler(this.btnGraph_Click);
             // 
             // ctlCalculator
             // 
@@ -453,7 +522,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
             this.Name = "ctlCalculator";
-            this.Size = new System.Drawing.Size(549, 350);
+            this.Size = new System.Drawing.Size(684, 350);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -497,5 +566,11 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelInfo;
         private System.Windows.Forms.Button btnMemDel;
+        private System.Windows.Forms.Button btnRightPara;
+        private System.Windows.Forms.Button btnLeftPara;
+        private System.Windows.Forms.ComboBox cboFunctions;
+        private System.Windows.Forms.Button btnFuncCreate;
+        private System.Windows.Forms.Button btnFuncComp;
+        private System.Windows.Forms.Button btnGraph;
     }
 }
