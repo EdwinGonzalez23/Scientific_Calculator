@@ -16,138 +16,133 @@ namespace Scientific_Calculator.Controlers
 {
     public partial class ctlCalculator : UserControl
     {
-        Calculator calculator;
-        Functions functions;
+        Calculator Calculator;
+        List<Function> FuncList;
         public ctlCalculator() {
             InitializeComponent();
-            calculator = new Calculator();
-            functions = new Functions();
+            Calculator = new Calculator();
+            FuncList = new List<Function>();
         }
 
+        /* Event Listeners: Buttons 0-9, () */
         #region numbers clicked
         private void btn0_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "0";
             primTextBox.Focus();
-            calculator.PemdasOperatorActivated = false;
+            Calculator.PemdasOperatorActivated = false;
         }
         private void btn1_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "1";
             primTextBox.Focus();
-            calculator.PemdasOperatorActivated = false;
+            Calculator.PemdasOperatorActivated = false;
         }
         private void btn2_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "2";
             primTextBox.Focus();
-            calculator.PemdasOperatorActivated = false;
+            Calculator.PemdasOperatorActivated = false;
         }
         private void btn3_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "3";
             primTextBox.Focus();
-            calculator.PemdasOperatorActivated = false;
+            Calculator.PemdasOperatorActivated = false;
         }
         private void btn4_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "4";
             primTextBox.Focus();
-            calculator.PemdasOperatorActivated = false;
+            Calculator.PemdasOperatorActivated = false;
         }
         private void btn5_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "5";
             primTextBox.Focus();
-            calculator.PemdasOperatorActivated = false;
+            Calculator.PemdasOperatorActivated = false;
         }
         private void btn6_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "6";
             primTextBox.Focus();
-            calculator.PemdasOperatorActivated = false;
+            Calculator.PemdasOperatorActivated = false;
         }
         private void btn7_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "7";
             primTextBox.Focus();
-            calculator.PemdasOperatorActivated = false;
+            Calculator.PemdasOperatorActivated = false;
         }
         private void btn8_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "8";
             primTextBox.Focus();
-            calculator.PemdasOperatorActivated = false;
+            Calculator.PemdasOperatorActivated = false;
         }
         private void btn9_Click(object sender, EventArgs e)
         {
             primTextBox.Text += "9";
             primTextBox.Focus();
-            calculator.PemdasOperatorActivated = false;
+            Calculator.PemdasOperatorActivated = false;
         }
         private void btnLeftPara_Click(object sender, EventArgs e) {
             primTextBox.Text += "(";
             primTextBox.Focus();
-            calculator.PemdasOperatorActivated = false;
+            Calculator.PemdasOperatorActivated = false;
         }
         private void btnRightPara_Click(object sender, EventArgs e) {
             primTextBox.Text += ")";
             primTextBox.Focus();
-            calculator.PemdasOperatorActivated = false;
+            Calculator.PemdasOperatorActivated = false;
         }
         #endregion
 
+
+        /* Event Listeners: Clear, Cancel, Deletes */
         #region Clear Cancel
         private void btnClear_Click(object sender, EventArgs e) {
-            calculator.ClearCalculator();
-            FillCalcInfo();
+            Calculator.ClearCalculator();
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
-
+        // Delete 1 character from Primary Text box
         private void btnCancel_Click(object sender, EventArgs e) {
             string str = primTextBox.Text;
             int len = str.Length;
             if (len > 0) {
                 primTextBox.Text = (str.Substring(0, len - 1));
-                calculator.setPrim(primTextBox.Text);
+                Calculator.setPrim(primTextBox.Text);
             }
             primTextBox.Focus();
         }
+        // // Delete 1 character from Memory Text box
         private void btnMemDel_Click(object sender, EventArgs e) {
             string str = memTextBox.Text;
             int len = str.Length;
             if (len > 0) {
                 memTextBox.Text = (str.Substring(0, len - 1));
-                calculator.setMem(memTextBox.Text);
+                Calculator.setMem(memTextBox.Text);
             }
             primTextBox.Focus();
         }
         #endregion
  
+        // Places Cursor at end of primTextBox after a reset occurs
         private void shiftCursor() {
             primTextBox.SelectionStart = primTextBox.Text.Length + 1;
             primTextBox.SelectionLength = 0;
         }
-        // Note: Repeat Operator Example: 0+0 or 1*1 or 1/1, etc
         
-        private void InsertMemBox(bool flip, string op) {
-            if (flip) {
-                memTextBox.Text += primTextBox.Text;
-                memTextBox.Text += op;
-            }
-            else {
-                memTextBox.Text += op;
-                memTextBox.Text += primTextBox.Text;
-            }
-        }
+        /* Keyboard Listeners: Addition, Mult, Div, Etc */
         #region Keyboard Listeners
         private void primTextBox_KeyDown(object sender, KeyEventArgs e) {
             //Console.WriteLine(e.KeyCode);
             switch (e.KeyCode) {
                 case Keys.Enter:
                     SuppressKey(sender, e);
-                    calculator.CalculateResult();
-                    FillCalcInfo();
+                    Calculator.CalculateResult();
+                    UpdateCalculatorGUI();
                     return;
                 case Keys.Add:
                     SuppressKey(sender, e);
@@ -169,7 +164,7 @@ namespace Scientific_Calculator.Controlers
                     SuppressKey(sender, e);
                     btnDiv_Click(sender, e);
                     return;
-                case Keys.D6:
+                case Keys.D6: // ^
                     SuppressKey(sender, e);
                     btnExp_Click(sender, e);
                     return;
@@ -195,12 +190,12 @@ namespace Scientific_Calculator.Controlers
                     return;
                 case Keys.Escape:
                     SuppressKey(sender, e);
-                    calculator.ClearCalculator();
-                    FillCalcInfo();
+                    Calculator.ClearCalculator();
+                    UpdateCalculatorGUI();
                     primTextBox.Focus();
                     return;
                 default:
-                    calculator.PemdasOperatorActivated = false;
+                    Calculator.PemdasOperatorActivated = false;
                     break;
             }
             shiftCursor();
@@ -210,137 +205,141 @@ namespace Scientific_Calculator.Controlers
         }
         #endregion event listeners
 
+        /* Event Listeners: Add, Sub, Mul, Sub */
         #region +*/- buttons
         private void btnAdd_Click(object sender, EventArgs e) {
-            calculator.AddPressed();
-            primTextBox.Text = calculator.getPrim();
-            memTextBox.Text = calculator.getMem();
+            Calculator.AddPressed();
+            primTextBox.Text = Calculator.getPrim();
+            memTextBox.Text = Calculator.getMem();
             primTextBox.Focus();
         }
         private void btnDiv_Click(object sender, EventArgs e) {
-            calculator.DividePressed();
-            primTextBox.Text = calculator.getPrim();
-            memTextBox.Text = calculator.getMem();
+            Calculator.DividePressed();
+            primTextBox.Text = Calculator.getPrim();
+            memTextBox.Text = Calculator.getMem();
             primTextBox.Focus();
         }
 
         private void btnMult_Click(object sender, EventArgs e) {
-            calculator.MultPressed();
-            primTextBox.Text = calculator.getPrim();
-            memTextBox.Text = calculator.getMem();
+            Calculator.MultPressed();
+            primTextBox.Text = Calculator.getPrim();
+            memTextBox.Text = Calculator.getMem();
             primTextBox.Focus();
         }
 
         private void btnSub_Click(object sender, EventArgs e) {
-            calculator.SubPressed();
-            primTextBox.Text = calculator.getPrim();
-            memTextBox.Text = calculator.getMem();
+            Calculator.SubPressed();
+            primTextBox.Text = Calculator.getPrim();
+            memTextBox.Text = Calculator.getMem();
             primTextBox.Focus();
         }
         #endregion +*/- buttons
 
+        /* Event Listeners: Pow, Sqrt, Sin, Cos, etc (Non basic arithmitec operators) */
         #region Non +*/- buttons
         private void btnEquals_Click(object sender, EventArgs e) {
-            // Result();
-            //if (TextNotEmpty(memTextBox.Text) && !TextNotEmpty(primTextBox.Text)) {
-            //    if (mem)
-            //}
-            calculator.CalculateResult();
-            FillCalcInfo();
+            Calculator.CalculateResult();
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         private void btnSign_Click(object sender, EventArgs e) {
-            calculator.SignChange();
-            FillCalcInfo();
+            Calculator.SignChange();
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         private void btnDot_Click(object sender, EventArgs e) {
-            calculator.DotPressed();
-            FillCalcInfo();
+            Calculator.DotPressed();
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         private void btnSqrt_Click(object sender, EventArgs e) {
-            calculator.SqrtPressed(2);
-            FillCalcInfo();
+            Calculator.SqrtPressed(2);
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         private void btnSqrt3_Click(object sender, EventArgs e) {
-            calculator.SqrtPressed(3);
-            FillCalcInfo();
+            Calculator.SqrtPressed(3);
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         private void btnPow2_Click(object sender, EventArgs e) {
-            calculator.PowPressed(2);
-            FillCalcInfo();
+            Calculator.PowPressed(2);
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         private void btnPow3_Click(object sender, EventArgs e) {
-            calculator.PowPressed(3);
-            FillCalcInfo();
+            Calculator.PowPressed(3);
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         private void btnCos_Click(object sender, EventArgs e) {
-            calculator.CosPressed();
-            FillCalcInfo();
+            Calculator.CosPressed();
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         private void btnSin_Click(object sender, EventArgs e) {
-            calculator.SinPressed();
-            FillCalcInfo();
+            Calculator.SinPressed();
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         private void btnTan_Click(object sender, EventArgs e) {
-            calculator.TanPressed();
-            FillCalcInfo();
+            Calculator.TanPressed();
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         private void btnLn_Click(object sender, EventArgs e) {
-            calculator.lnPressed();
-            FillCalcInfo();
+            Calculator.lnPressed();
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         private void btnExp_Click(object sender, EventArgs e) {
             bool IsNum = false;
             int exp = 0;
+            // User Input Box - Asks for Exponent
             while (!IsNum) {
                 string exponent = Microsoft.VisualBasic.Interaction.InputBox("Enter Exponent", string.Empty, string.Empty, -1, -1);
                 if (int.TryParse(exponent, out exp) && exp >= 0) {
                     IsNum = true;
                 }
             }
+            // ^ stays appended when Keyboard ^ press occurs. Need to trim it. However, need to catch an out of bounds 
+            // when function is called via GUI button press
             try {
                 if (TextNotEmpty(primTextBox.Text) && primTextBox.Text[primTextBox.TextLength - 1].Equals('^')) {
-                    calculator.setPrim(primTextBox.Text.TrimEnd(primTextBox.Text[primTextBox.Text.Length - 1]));
+                    Calculator.setPrim(primTextBox.Text.TrimEnd(primTextBox.Text[primTextBox.Text.Length - 1]));
                 }
             }
             catch (System.IndexOutOfRangeException ex) {
-                calculator.setLabel("Not a valid input");
+                Calculator.setLabel("Not a valid input");
                 return;
             }
 
-            calculator.PowPressed(exp);
-            FillCalcInfo();
+            Calculator.PowPressed(exp);
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         private void SquareRoot() {
             bool IsNum = false;
             int square = 0;
+            // User Input Box - Asks for root
             while (!IsNum) {
                 string exponent = Microsoft.VisualBasic.Interaction.InputBox("Enter Root", string.Empty, string.Empty, -1, -1);
                 if (int.TryParse(exponent, out square) && square > 0) {
                     IsNum = true;
                 }
             }
+            // q stays appended when Keyboard q press occurs. Need to trim it. However, need to catch an out of bounds 
+            // when function is called via GUI button press
             try {
                 if (primTextBox.Text[primTextBox.TextLength - 1].Equals('q')) {
-                    calculator.setPrim(primTextBox.Text.TrimEnd(primTextBox.Text[primTextBox.Text.Length - 1]));
+                    Calculator.setPrim(primTextBox.Text.TrimEnd(primTextBox.Text[primTextBox.Text.Length - 1]));
                 }
             } catch (System.IndexOutOfRangeException ex) {
-                calculator.setLabel("Not a valid input");
+                Calculator.setLabel("Not a valid input");
                 return;
             }
-            calculator.SqrtPressed(square);
-            FillCalcInfo();
+            Calculator.SqrtPressed(square);
+            UpdateCalculatorGUI();
             primTextBox.Focus();
         }
         #endregion Non +*/- buttons
@@ -351,22 +350,24 @@ namespace Scientific_Calculator.Controlers
                 return false;
             }
         }
-        private void FillCalcInfo() {
-            primTextBox.Text = calculator.getPrim();
-            memTextBox.Text = calculator.getMem();
-            labelInfo.Text = calculator.getLabel();
+        /* Sets the Primary and Memory Textboxes of the Calculator ctl*/
+        private void UpdateCalculatorGUI() {
+            primTextBox.Text = Calculator.getPrim();
+            memTextBox.Text = Calculator.getMem();
+            labelInfo.Text = Calculator.getLabel();
         }
         private void primTextBox_TextChanged(object sender, EventArgs e) {
-            calculator.setPrim(primTextBox.Text);
+            Calculator.setPrim(primTextBox.Text);
         }
 
-        private void memTextBox_TextChanged(object sender, EventArgs e) {
-            //calculator.setMem(memTextBox.Text);
-        }
+        // Handle a Key Stroke so it does not perform default keystroke behavior
         private void SuppressKey(object sender, KeyEventArgs e) {
             e.Handled = true;
             e.SuppressKeyPress = true;
         }
+
+        /* Allow only certain characters to be entered into the textboxes
+         * The allowed characters appear in the first if statements */
         private void primTextBox_KeyPress(object sender, KeyPressEventArgs e) {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != '-')
                 && (e.KeyChar != '^') && (e.KeyChar != 'l') && (e.KeyChar != 's')
@@ -374,18 +375,25 @@ namespace Scientific_Calculator.Controlers
                 && (e.KeyChar != '(') && (e.KeyChar != ')')) {
                 e.Handled = true;
             } else {
-                calculator.setPrim(Convert.ToString(e.KeyChar));
+                Calculator.setPrim(Convert.ToString(e.KeyChar));
             }
 
             // only allow one decimal point
             if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1)) {
                 e.Handled = true;
             } else if (char.IsControl(e.KeyChar) && char.IsDigit(e.KeyChar)) {
-                calculator.setPrim(Convert.ToString(e.KeyChar));
+                Calculator.setPrim(Convert.ToString(e.KeyChar));
             }
 
         }
 
+        /* Code of Graph Functionality */
+        #region Function/Graph
+
+        /*  While User Input not valid, ask user to input Linear Function.
+         *  If Linear Function valid, create that Function Object and add to 
+         *  List of Functions. List<Function>
+         */
         private void btnFuncCreate_Click(object sender, EventArgs e) {
             bool exit = false;
             while (!exit) {
@@ -394,8 +402,10 @@ namespace Scientific_Calculator.Controlers
                     break;
                 }
                 if (TextNotEmpty(function)) {
-                    if (functions.CreateFunction(function)) {
-                        FillFunctionCbo();
+                    Function func = new Function();
+                    if (func.CreateFunction(function)) { // Return True if Linear Function Valid
+                        FuncList.Add(func);
+                        FillFunctionsCbo();
                         exit = true;
                     } else {
                         MessageBox.Show("Invalid Expression", "Invalid Expressionz", MessageBoxButtons.OK);
@@ -405,11 +415,21 @@ namespace Scientific_Calculator.Controlers
             }
         }
 
-        private void FillFunctionCbo() {
-            cboFunctions.DataSource = null;
-            cboFunctions.DataSource = functions.GetFunctions();
+        // Use List<Function> FuncList to Fill FUNCTIONS Combo Box
+        private void FillFunctionsCbo() {
+            cboFunctions.Items.Clear();
+            foreach (Function function in FuncList) {
+                cboFunctions.Items.Add(function.GetFunction());
+            }
+            cboFunctions.SelectedIndex = 0;
         }
 
+        /* Computes a Linear Function:
+         *      Ask for a Valid Variable X,
+         *      grab selected function from Functions Combo Box,
+         *      Compute Function (Using Function.ComputeFunction(string, int) method,
+         *      Update Calculator Textboxes to show calculated result.
+         */
         private void btnFuncComp_Click(object sender, EventArgs e) {
             bool exit = false;
             int variable = 0;
@@ -423,16 +443,18 @@ namespace Scientific_Calculator.Controlers
                         exit = int.TryParse(var, out variable);
                     }
                 }
-                double result = functions.ComputeFunction(cboFunctions.Text, variable);
-                calculator.setMem(Convert.ToString(result));
-                calculator.setPrim(string.Empty);
-                calculator.setLabel(String.Format("f({0}) = {1}", variable, cboFunctions.Text));
-                FillCalcInfo();
+                int index = cboFunctions.SelectedIndex;
+                //double result = functions.ComputeFunction(cboFunctions.Text, variable);
+                double result = FuncList[index].ComputeFunction(cboFunctions.Text, variable);
+                Calculator.setMem(Convert.ToString(result));
+                Calculator.setPrim(string.Empty);
+                Calculator.setLabel(String.Format("f({0}) = {1}", variable, cboFunctions.Text));
+                UpdateCalculatorGUI();
             } else {
                 MessageBox.Show("No Functions Exist", "Warning", MessageBoxButtons.OK);
             }
         }
-
+        // Pop out a Chart Form that graphs a Linear Function
         private void btnGraph_Click(object sender, EventArgs e) {
             ChartForm form = new ChartForm();
             if (cboFunctions.Items.Count > 0) {
@@ -442,6 +464,9 @@ namespace Scientific_Calculator.Controlers
                 form.Show();
             }
         }
+        #endregion
+
+
         // FOR TESTING ONLY
         //-----------------------------
         //private void memTextBox_KeyPress(object sender, KeyPressEventArgs e) {
@@ -458,5 +483,8 @@ namespace Scientific_Calculator.Controlers
         //        calculator.setMem(Convert.ToString(e.KeyChar));
         //    }
         //}
+        private void memTextBox_TextChanged(object sender, EventArgs e) {
+            //calculator.setMem(memTextBox.Text);
+        }
     }
 }

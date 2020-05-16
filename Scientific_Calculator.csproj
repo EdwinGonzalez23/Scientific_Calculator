@@ -49,18 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Calculator.cs" />
-    <Compile Include="Classes\Functions.cs" />
+    <Compile Include="Classes\Function.cs" />
     <Compile Include="Controlers\ctlCalculator.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controlers\ctlCalculator.Designer.cs">
       <DependentUpon>ctlCalculator.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controlers\ctlGraph.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controlers\ctlGraph.Designer.cs">
-      <DependentUpon>ctlGraph.cs</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -90,9 +84,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controlers\ctlCalculator.resx">
       <DependentUpon>ctlCalculator.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controlers\ctlGraph.resx">
-      <DependentUpon>ctlGraph.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ChartForm.resx">
       <DependentUpon>ChartForm.cs</DependentUpon>

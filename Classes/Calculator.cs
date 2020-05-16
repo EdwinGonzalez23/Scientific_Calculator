@@ -18,32 +18,21 @@ namespace Scientific_Calculator.Classes
         public bool FunctionActivated { get; set; } //NON PEMDAS OPERATOR
         public bool AnswerCalculated = false;
 
-        public void SqrtPressed() {
-            // Calculate Result
-        }
+        
         public void AddPressed() {
-            AppendToMem("+");
-            //MemText += (PrimText + "+");
-            //PrimText = string.Empty;
+            BasicOperatorPressed("+");
         }
         public void MultPressed() {
-            AppendToMem("*");
-            //MemText += (PrimText + "*");
-            //PrimText = string.Empty;
+            BasicOperatorPressed("*");
         }
         public void DividePressed() {
-            AppendToMem("/");
-            //MemText += (PrimText + "/");
-            //PrimText = string.Empty;
+            BasicOperatorPressed("/");
         }
         public void SubPressed() {
-            AppendToMem("-");
-            //MemText += (PrimText + "-");
-            //PrimText = string.Empty;
+            BasicOperatorPressed("-");
         }
         public void DotPressed() {
             PrimText += ".";
-            //PrimText = string.Empty;
         }
 
         public void SignChange() {
@@ -345,14 +334,14 @@ namespace Scientific_Calculator.Classes
         public void CalculateResult() {
             Result();
         }
-        /* Name: AppendToPrim()
-         * Parameters: The Operator being appended
-         * Return: void
-         * Description: Handles data being inserted into memory (MemText)
-         *  Prevents Operator's from being repeated by user. 
-         *  Example: 3++3 repeats the + operator twice. 
+        /* An operators + * / - is pressed. 
+         * OverridePrim: Replace Memory with Primary 
+         * OverrideMem: Append Primary to Memory
+         * Append: Append Primary to Memory
+         * Abort: Not a valid expression
+         * None: Primary and Memory are empty, append a 0 +
          */
-        private void AppendToMem(string Operator) {
+        private void BasicOperatorPressed(string Operator) {
             switch (State()) {
                 case "OverridePrim":
                     if (TextNotEmpty(MemText) && !LastCharOperator(MemText)) {

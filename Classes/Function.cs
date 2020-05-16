@@ -8,15 +8,33 @@ using System.Threading.Tasks;
 
 namespace Scientific_Calculator.Classes
 {
-    class Functions
+    class Function
     {
-        private List<string> mFunctions;
-
-        public Functions() {
-            mFunctions = new List<string>();
+        private string mFunction;
+        public Function() {
         }
 
         public bool CreateFunction(string function) {
+            if(CheckFunctionValid(function)) {
+                mFunction = function;
+                return true;
+            } 
+            else {
+                return false;
+            }
+        }
+
+        public double ComputeFunction(string function, int x) {
+            function = function.Replace(@"x", "(" + x + ")");
+            var result = new DataTable().Compute(function, null);
+            return Convert.ToDouble(result);
+        }
+        // Set x = 1 so express may be run through DataTable.Compute()
+        private string PrepFunction(string function) {
+            string NewString = function.Replace(@"x", "(1)");
+            return NewString;
+        }
+        private bool CheckFunctionValid(string function) {
             try {
                 string expression = PrepFunction(function);
                 var result = new DataTable().Compute(expression, null);
@@ -27,7 +45,6 @@ namespace Scientific_Calculator.Classes
                     return false;
                 }
                 else {
-                    mFunctions.Add(function);
                     return true;
                 }
             }
@@ -39,19 +56,8 @@ namespace Scientific_Calculator.Classes
             return false;
         }
 
-        public List<string> GetFunctions() {
-            return mFunctions;
-        }
-
-        public double ComputeFunction(string function, int x) {
-            function = function.Replace(@"x", "*" + x);
-            var result = new DataTable().Compute(function, null);
-            return Convert.ToDouble(result);
-        }
-
-        private string PrepFunction(string function) {
-            string NewString = function.Replace(@"x", "");
-            return NewString;
+        public string GetFunction() {
+            return mFunction;
         }
     }
 }

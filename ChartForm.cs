@@ -22,21 +22,22 @@ namespace Scientific_Calculator
         }
 
         public void SetDataPoints(string function) {
-            int y = ComputeDataPoints(function);
-            Graph.Series[0].Points.AddXY(0, 0);
+            int origin = ComputeDataPoints(function, 0);
+            int y = ComputeDataPoints(function, 10);
+            Graph.Series[0].Points.AddXY(0, origin);
             Graph.Series[0].Points.AddXY(10, y);
         }
 
         public void SetGraphType(string type) {
             if (type.Equals("line")) {
-                //Graph.ChartAreas[0].AxisY.ScaleView.Zoom(-15, 15);
-                //Graph.ChartAreas[0].AxisX.ScaleView.Zoom(-15, 15);
+                //Graph.ChartAreas[0].AxisY.ScaleView.Zoom(0, 15);
+                //Graph.ChartAreas[0].AxisX.ScaleView.Zoom(0, 15);
                 Graph.Series[0].ChartType = SeriesChartType.Line;
             }
         }
-
-        private int ComputeDataPoints(string function) {
-            function = function.Replace(@"x", "*" + 10);
+        // Compute the Linear Function and return Y
+        private int ComputeDataPoints(string function, int variable) {
+            function = function.Replace(@"x", "*" + variable);
             try {
                 var result = new DataTable().Compute(function, null);
                 return Convert.ToInt32(result);
