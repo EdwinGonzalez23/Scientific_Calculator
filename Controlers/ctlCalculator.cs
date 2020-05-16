@@ -87,11 +87,17 @@ namespace Scientific_Calculator.Controlers
             Calculator.PemdasOperatorActivated = false;
         }
         private void btnLeftPara_Click(object sender, EventArgs e) {
+            //Calculator.LeftParanthesisPressed();
+            //UpdateCalculatorGUI();
+            //primTextBox.Focus();
             primTextBox.Text += "(";
             primTextBox.Focus();
             Calculator.PemdasOperatorActivated = false;
         }
         private void btnRightPara_Click(object sender, EventArgs e) {
+            //Calculator.RightParanthesisPressed();
+            //UpdateCalculatorGUI();
+            //primTextBox.Focus();
             primTextBox.Text += ")";
             primTextBox.Focus();
             Calculator.PemdasOperatorActivated = false;
@@ -398,7 +404,7 @@ namespace Scientific_Calculator.Controlers
             bool exit = false;
             while (!exit) {
                 string function = Microsoft.VisualBasic.Interaction.InputBox("Enter Function: f(x) = [your input]", string.Empty, string.Empty, -1, -1);
-                if (function.Equals("")) {
+                 if (function.Equals("")) {
                     break;
                 }
                 if (TextNotEmpty(function)) {

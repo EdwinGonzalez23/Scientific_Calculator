@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic.Devices;
+using Scientific_Calculator.Popups;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -25,19 +26,34 @@ namespace Scientific_Calculator.Classes
         }
 
         public double ComputeFunction(string function, int x) {
-            function = function.Replace(@"x", "(" + x + ")");
-            var result = new DataTable().Compute(function, null);
+            string expression;
+            double result;
+            // Try X with no Constant, Catch -> then try X with Constant
+            try {
+                expression = function.Replace(@"x", "(" + x + ")");
+                result = Convert.ToDouble(new DataTable().Compute(expression, null));
+            }
+            catch {
+                expression = function.Replace(@"x", "*(" + x + ")");
+                result = Convert.ToDouble(new DataTable().Compute(expression, null));
+            }
             return Convert.ToDouble(result);
         }
-        // Set x = 1 so express may be run through DataTable.Compute()
-        private string PrepFunction(string function) {
-            string NewString = function.Replace(@"x", "(1)");
-            return NewString;
-        }
+        
         private bool CheckFunctionValid(string function) {
             try {
-                string expression = PrepFunction(function);
-                var result = new DataTable().Compute(expression, null);
+                string expression = string.Empty;
+                double result = 0;
+                // Try X with no Constant, Catch -> then try X with Constant
+                try {
+                    expression = function.Replace(@"x", "(1)");
+                    result = Convert.ToDouble(new DataTable().Compute(expression, null));
+                }
+                catch {
+                    expression = function.Replace(@"x", "*(1)");
+                    result = Convert.ToDouble(new DataTable().Compute(expression, null));
+                }
+                // Just in case something weird happens
                 if (Double.IsInfinity(Convert.ToDouble(result))) {
                     return false;
                 }

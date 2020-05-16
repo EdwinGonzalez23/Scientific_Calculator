@@ -6,6 +6,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+/*  This class represents a Scientific Calculator.
+ * It can perform most basic functionalities.
+ */
+
 namespace Scientific_Calculator.Classes
 {
     class Calculator
@@ -33,6 +37,12 @@ namespace Scientific_Calculator.Classes
         }
         public void DotPressed() {
             PrimText += ".";
+        }
+        public void LeftParanthesisPressed() {
+            BasicOperatorPressed("(");
+        }
+        public void RightParanthesisPressed() {
+            BasicOperatorPressed(")");
         }
 
         public void SignChange() {
@@ -263,12 +273,13 @@ namespace Scientific_Calculator.Classes
         }
         private void Result() {
 
-            // Enter Hit But No Operator (Just Override)
+            // Result called, but Mem and Prim Text are empty (no user input at all)
             if (TextNotEmpty(MemText) && TextNotEmpty(PrimText) && !LastCharOperator(MemText) && !LastCharOperator(PrimText)) {
                 MemText = PrimText;
                 PrimText = string.Empty;
                 return;
             }
+            // Move everything to Mem Text (where operation will be calculated)
             MemText += PrimText;
             MemText = Regex.Replace(MemText, @"\s", ""); // Trim White Space
             string exp = MemText;
@@ -295,11 +306,31 @@ namespace Scientific_Calculator.Classes
             }
             
         }
+        /* The following function returns the state of the calculator. There are 5 states.
+         * 
+         * 1: Memory is empty, Primary is not empty OR Mem and Prim are not empty and an operator has not been pressed:
+         *      OverridePrim: Act on Primary value
+         *      
+         * 2: Memory is not empty, Primary is empty and an operator has not been pressed:
+         *      OverrideMem: Act on Memory value
+         *      
+         * 3: Memory is not empty, Primary is empty and an operator has been pressed:
+         *      Abort: Expression in Memory is not valid until a number is in Primary    
+         *      
+         * 4: Memory is not empty, Primary is no empty and an operator has been pressed:
+         *      Append: Append Primary to Memory (Chain expressions together)     
+         *      
+         * 5: An operation has occured, ABORT as state will not make sense (CURRENTLY DOES NOTHING)
+         * 
+         * RETURN NONE if NONE of these STATES OCCUR
+         *      
+         */
         private string State() {
             if (!TextNotEmpty(MemText) && TextNotEmpty(PrimText)
                 || (TextNotEmpty(MemText) && TextNotEmpty(PrimText) && !LastCharOperator(MemText))) {
                 return "OverridePrim";
-            } else if ((TextNotEmpty(MemText) && !TextNotEmpty(PrimText) && !LastCharOperator(MemText))) {
+            } 
+            else if ((TextNotEmpty(MemText) && !TextNotEmpty(PrimText) && !LastCharOperator(MemText))) {
                 return "OverrideMem";
             }
             else if ((TextNotEmpty(MemText) && !TextNotEmpty(PrimText) && LastCharOperator(MemText))) {
@@ -361,7 +392,17 @@ namespace Scientific_Calculator.Classes
                     PrimText = string.Empty;
                     return;
                 case "Abort":
-                    LabelText = "Please Enter a Valid Expression";
+                    if (Operator.Equals("(")) {
+                        MemText += (PrimText + Operator);
+                        PrimText = string.Empty;
+                    }
+                    else if (Operator.Equals(")")) {
+                        MemText += (PrimText + Operator);
+                        PrimText = string.Empty;
+                    }
+                    else {
+                        LabelText = "Please Enter a Valid Expression";
+                    }
                     return;
                 case "none":
                     MemText = "0" + Operator;
@@ -378,6 +419,8 @@ namespace Scientific_Calculator.Classes
                 return false;
             }
         }
+        // Check if last character in MemText is an Operator 
+        // If True: a valid expression still needs to be formed
         private bool LastCharOperator(string str) {
             if (TextNotEmpty(str)) {
                 int len = str.Length;
@@ -398,7 +441,8 @@ namespace Scientific_Calculator.Classes
             PemdasOperatorActivated = false;
             AnswerCalculated = false;
         }
-
+        // Check if a string is a valid double representation 
+        // Used to check if input into calculator is valid
         private bool IsValidDouble(out double num, string expression) {
             try {
                 num = Convert.ToDouble(expression);
@@ -410,7 +454,7 @@ namespace Scientific_Calculator.Classes
             }
             return true;
         }
-        
+        // Is express valid?
         private bool IsValidExpression(out double result, double expression) {
             if (Double.IsInfinity(expression)) {
                 LabelText = "Please Enter a Valid Expression";
