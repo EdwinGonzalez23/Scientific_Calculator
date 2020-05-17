@@ -7,6 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/*
+ *  course: cmps3500
+ *  Final Project: Scientific Calculator
+ *  date: 05/18/2020
+ *  username: egonzalez (Odin)  egonzalez88 (CSUB)
+ *  name: Edwin Gonzalez
+ *  description: This class represents a linear function
+ * 
+ */
+
 namespace Scientific_Calculator.Classes
 {
     class Function
@@ -16,7 +26,7 @@ namespace Scientific_Calculator.Classes
         }
 
         public bool CreateFunction(string function) {
-            if(CheckFunctionValid(function)) {
+            if(IsFunctionValid(function)) {
                 mFunction = function;
                 return true;
             } 
@@ -40,7 +50,7 @@ namespace Scientific_Calculator.Classes
             return Convert.ToDouble(result);
         }
         
-        private bool CheckFunctionValid(string function) {
+        private bool IsFunctionValid(string function) {
             try {
                 string expression = string.Empty;
                 double result = 0;

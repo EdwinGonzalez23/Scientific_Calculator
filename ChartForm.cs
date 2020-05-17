@@ -20,7 +20,7 @@ namespace Scientific_Calculator
         public void SetLegendText(string str) {
             Graph.Series[0].LegendText = str;
         }
-
+        // Create two points when x = 0 and x = 10 and graph a line
         public void SetDataPoints(string function) {
             int origin = ComputeDataPoints(function, 0);
             int y = ComputeDataPoints(function, 10);
@@ -38,6 +38,7 @@ namespace Scientific_Calculator
         // Compute the Linear Function and return Y
         private int ComputeDataPoints(string function, int variable) {
             function = function.Replace(@"x", "*" + variable);
+            // Try with no constant attached to X, catch -> try with constant attached to X
             try {
                 var result = new DataTable().Compute(function, null);
                 return Convert.ToInt32(result);

@@ -12,16 +12,33 @@ using Scientific_Calculator.Classes;
 using Scientific_Calculator.Popups;
 using System.Windows.Forms.DataVisualization.Charting;
 
+/*
+ *  course: cmps3500
+ *  Final Project: Scientific Calculator
+ *  date: 05/18/2020
+ *  username: egonzalez (Odin)  egonzalez88 (CSUB)
+ *  name: Edwin Gonzalez
+ *  description: The control for the scientific calculator form
+ *      This form does the following:
+ *      1. Instantiates a Calculator Object
+ *      2. Creates event listeners for the calculator GUI (input boxes, buttons, combo-boxes)
+ *      3. Listens for user input
+ *          3a. Validates user input 
+ *      4. Passes user input to Calculator Object using object methods to update calculator state
+ *      5. Returns calculator data using object methods and updates the GUI
+ * 
+ */
+
 namespace Scientific_Calculator.Controlers
 {
     public partial class ctlCalculator : UserControl
     {
         Calculator Calculator;
-        List<Function> FuncList;
+        List<Function> FunctionList;
         public ctlCalculator() {
             InitializeComponent();
             Calculator = new Calculator();
-            FuncList = new List<Function>();
+            FunctionList = new List<Function>();
         }
 
         /* Event Listeners: Buttons 0-9, () */
@@ -87,17 +104,11 @@ namespace Scientific_Calculator.Controlers
             Calculator.PemdasOperatorActivated = false;
         }
         private void btnLeftPara_Click(object sender, EventArgs e) {
-            //Calculator.LeftParanthesisPressed();
-            //UpdateCalculatorGUI();
-            //primTextBox.Focus();
             primTextBox.Text += "(";
             primTextBox.Focus();
             Calculator.PemdasOperatorActivated = false;
         }
         private void btnRightPara_Click(object sender, EventArgs e) {
-            //Calculator.RightParanthesisPressed();
-            //UpdateCalculatorGUI();
-            //primTextBox.Focus();
             primTextBox.Text += ")";
             primTextBox.Focus();
             Calculator.PemdasOperatorActivated = false;
@@ -134,7 +145,7 @@ namespace Scientific_Calculator.Controlers
         }
         #endregion
  
-        // Places Cursor at end of primTextBox after a reset occurs
+        // Places Cursor at end of primTextBox input after a reset occurs
         private void shiftCursor() {
             primTextBox.SelectionStart = primTextBox.Text.Length + 1;
             primTextBox.SelectionLength = 0;
@@ -149,62 +160,74 @@ namespace Scientific_Calculator.Controlers
                     SuppressKey(sender, e);
                     Calculator.CalculateResult();
                     UpdateCalculatorGUI();
+                    shiftCursor();
                     return;
                 case Keys.Add:
                     SuppressKey(sender, e);
                     btnAdd_Click(sender, e);
+                    shiftCursor();
                     return;
                 case Keys.Multiply:
                     SuppressKey(sender, e);
                     btnMult_Click(sender, e);
+                    shiftCursor();
                     return;
                 case Keys.Subtract:
                     SuppressKey(sender, e);
                     btnSub_Click(sender, e);
+                    shiftCursor();
                     return;
                 case Keys.Delete:
                     SuppressKey(sender, e);
                     btnMemDel_Click(sender, e);
+                    shiftCursor();
                     return;
                 case Keys.Divide:
                     SuppressKey(sender, e);
                     btnDiv_Click(sender, e);
+                    shiftCursor();
                     return;
                 case Keys.D6: // ^
                     SuppressKey(sender, e);
                     btnExp_Click(sender, e);
+                    shiftCursor();
                     return;
                 case Keys.L:
                     SuppressKey(sender, e);
                     btnLn_Click(sender, e);
+                    shiftCursor();
                     return;
                 case Keys.Q:
                     SuppressKey(sender, e);
                     SquareRoot();
+                    shiftCursor();
                     return;
                 case Keys.C:
                     SuppressKey(sender, e);
                     btnCos_Click(sender, e);
+                    shiftCursor();
                     return;
                 case Keys.T:
                     SuppressKey(sender, e);
                     btnTan_Click(sender, e);
+                    shiftCursor();
                     return;
                 case Keys.S:
                     SuppressKey(sender, e);
                     btnSin_Click(sender, e);
+                    shiftCursor();
                     return;
                 case Keys.Escape:
                     SuppressKey(sender, e);
                     Calculator.ClearCalculator();
                     UpdateCalculatorGUI();
                     primTextBox.Focus();
+                    shiftCursor();
                     return;
                 default:
                     Calculator.PemdasOperatorActivated = false;
                     break;
             }
-            shiftCursor();
         }
         private void primTextBox_Enter(object sender, EventArgs e) {
             shiftCursor();
@@ -308,7 +331,7 @@ namespace Scientific_Calculator.Controlers
                     IsNum = true;
                 }
             }
-            // ^ stays appended when Keyboard ^ press occurs. Need to trim it. However, need to catch an out of bounds 
+            // '^' stays appended when Keyboard key '^' press occurs. Need to trim it. However, need to catch an out of bounds 
             // when function is called via GUI button press
             try {
                 if (TextNotEmpty(primTextBox.Text) && primTextBox.Text[primTextBox.TextLength - 1].Equals('^')) {
@@ -334,7 +357,7 @@ namespace Scientific_Calculator.Controlers
                     IsNum = true;
                 }
             }
-            // q stays appended when Keyboard q press occurs. Need to trim it. However, need to catch an out of bounds 
+            // 'q' stays appended when Keyboard key 'q' press occurs. Need to trim it. However, need to catch an out of bounds 
             // when function is called via GUI button press
             try {
                 if (primTextBox.Text[primTextBox.TextLength - 1].Equals('q')) {
@@ -356,7 +379,7 @@ namespace Scientific_Calculator.Controlers
                 return false;
             }
         }
-        /* Sets the Primary and Memory Textboxes of the Calculator ctl*/
+        /* Sets the text for Primary and Memory Textboxes and label text of the Calculator ctl*/
         private void UpdateCalculatorGUI() {
             primTextBox.Text = Calculator.getPrim();
             memTextBox.Text = Calculator.getMem();
@@ -410,7 +433,7 @@ namespace Scientific_Calculator.Controlers
                 if (TextNotEmpty(function)) {
                     Function func = new Function();
                     if (func.CreateFunction(function)) { // Return True if Linear Function Valid
-                        FuncList.Add(func);
+                        FunctionList.Add(func);
                         FillFunctionsCbo();
                         exit = true;
                     } else {
@@ -424,15 +447,15 @@ namespace Scientific_Calculator.Controlers
         // Use List<Function> FuncList to Fill FUNCTIONS Combo Box
         private void FillFunctionsCbo() {
             cboFunctions.Items.Clear();
-            foreach (Function function in FuncList) {
+            foreach (Function function in FunctionList) {
                 cboFunctions.Items.Add(function.GetFunction());
             }
-            cboFunctions.SelectedIndex = 0;
+            cboFunctions.SelectedIndex = 0; // Select first item in Combobox by default
         }
 
         /* Computes a Linear Function:
          *      Ask for a Valid Variable X,
-         *      grab selected function from Functions Combo Box,
+         *      grab selected function from functions Combo Box,
          *      Compute Function (Using Function.ComputeFunction(string, int) method,
          *      Update Calculator Textboxes to show calculated result.
          */
@@ -450,8 +473,7 @@ namespace Scientific_Calculator.Controlers
                     }
                 }
                 int index = cboFunctions.SelectedIndex;
-                //double result = functions.ComputeFunction(cboFunctions.Text, variable);
-                double result = FuncList[index].ComputeFunction(cboFunctions.Text, variable);
+                double result = FunctionList[index].ComputeFunction(cboFunctions.Text, variable);
                 Calculator.setMem(Convert.ToString(result));
                 Calculator.setPrim(string.Empty);
                 Calculator.setLabel(String.Format("f({0}) = {1}", variable, cboFunctions.Text));

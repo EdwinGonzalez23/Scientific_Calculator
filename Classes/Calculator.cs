@@ -6,20 +6,24 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-/*  This class represents a Scientific Calculator.
- * It can perform most basic functionalities.
+/*
+ *  course: cmps3500
+ *  Final Project: Scientific Calculator
+ *  date: 05/18/2020
+ *  username: egonzalez (Odin)  egonzalez88 (CSUB)
+ *  name: Edwin Gonzalez
+ *  description: This class represents a Scientific Calculator.
+ *      It can perform most basic functionalities of a scientific calculator. 
  */
 
 namespace Scientific_Calculator.Classes
 {
     class Calculator
     {
-        private string PrimText;
-        private string MemText;
+        private string PrimText; // User input
+        private string MemText; // Temp Memory for Calculator
         private string LabelText;
         public bool PemdasOperatorActivated { get; set; }
-        public bool NumberActivated { get; set; }
-        public bool FunctionActivated { get; set; } //NON PEMDAS OPERATOR
         public bool AnswerCalculated = false;
 
         
@@ -38,18 +42,24 @@ namespace Scientific_Calculator.Classes
         public void DotPressed() {
             PrimText += ".";
         }
-        public void LeftParanthesisPressed() {
-            BasicOperatorPressed("(");
-        }
-        public void RightParanthesisPressed() {
-            BasicOperatorPressed(")");
-        }
-
+        
         public void SignChange() {
             double num = Convert.ToDouble(PrimText);
             num *= -1;
             PrimText = num.ToString();
         }
+
+        /*
+         * The following functionalities all work in a similar way:
+         * 1. Case OverridePrim or OverrideMem: assign double num the value in either
+         *      PrimText or MemText and compute result AFTER SWITCH statement
+         *    
+         * 2. Append: Assign double num the value of PrimText but compute result inside that case
+         *      and return inside that case to exit method
+         *      
+         * 3. Abort: Invalid Operation. Abort Method
+         */
+
         // ln(x) = 1 / log
         public void lnPressed() {
             double num = 0;
@@ -271,6 +281,7 @@ namespace Scientific_Calculator.Classes
                 PrimText = string.Empty;
             }
         }
+        // ------------------------ END SWITCH STATEMENT FUNCTIONALITIES -----------------------------------
         private void Result() {
 
             // Result called, but Mem and Prim Text are empty (no user input at all)
